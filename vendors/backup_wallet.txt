@@ -1,0 +1,12 @@
+This script makes gpg-encrypted backups of your bitcoin wallet.
+
+= How to use =
+
+* Make script executable and writable only by your account
+    chmod 0755 /[PATH]/backup_wallet.sh
+* Change the settings in the upper part to point to the correct directories, binaries and gpg-keys.
+* Insert the correct command(s) to transfer the backup to a safe location. Examples are provides in the script.
+* Run on a regular basis. If possible, use cron/anacron/systemd to run. Make sure your backup commands can run unattended and without asking for passwords. To make a backup every day at 4:12am via cron, run
+    crontab -e
+and add the following line
+    12 4 * * * /[PATH]/backup_wallet.sh > /dev/null
