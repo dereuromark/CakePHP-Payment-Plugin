@@ -38,7 +38,9 @@ CakePHP 2.x
 	* username
 	* password
 
-## Administration: (optional) If you want to use the built in admin access to IPNs:
+## Administration (optional)
+If you want to use the built in admin access to IPNs:
+
 1. Make sure you're logged in as an Administrator via the Auth component.
 2. Navigate to `www.yoursite.com/admin/payment/bitcoin`
 
@@ -66,7 +68,7 @@ Create a function in your `/app/AppModel.php` like so:
 
 	public $helpers = array('Html','Form','Payment.Bitcoin');
 
-### Usage: (view the actual /payment/View/Helpers/BitcoinHelper.php for more information)
+### Usage: (view the actual /View/Helpers/BitcoinHelper.php for more information)
 		$this->Bitcoin->image(64);
 
 		$this->Bitcoin->paymentBox(12.3, YOUR_ADDRESS);
