@@ -3,7 +3,6 @@ App::uses('Component', 'Controller');
 
 /**
  * @see http://code.google.com/intl/de-DE/apis/checkout/samples/Google_Checkout_Sample_Code_PHP.html
- * 2011-10-04 ms
  */
 class GoogleComponent extends Component {
 
@@ -12,6 +11,7 @@ class GoogleComponent extends Component {
 	public $controller = null;
 
 	public $live = false;
+
 	public $urls = array(
 		'sandbox' => 'https://sandbox.google.com/checkout',
 		'live' => 'https://checkout.google.com',
@@ -28,20 +28,17 @@ class GoogleComponent extends Component {
 		//'shipping' => false, # do not ask for address etc
 		'prepare_only' => 1,
 		'img' => '',
-		'notifyurl' => array('admin'=>false, 'plugin'=>'payment', 'controller'=>'transactions', 'action'=>'notify', 'skrill'),
+		'notifyurl' => array('admin' => false, 'plugin' => 'payment', 'controller' => 'transactions', 'action' => 'notify', 'skrill'),
 	);
-
 
 	public function __construct(ComponentCollection $Collection, $settings = array()) {
 		parent::__construct($Collection, $settings);
 		# modify urls if neccessary
 	}
 
-
 	/**
 	 * Initialize component
 	 *
-	 * @access public
 	 * @return array
 	 * @author Daniel Quappe
 	 */
@@ -52,27 +49,22 @@ class GoogleComponent extends Component {
 
 	/**
 	 * go the express checkout
-	 * 2010-09-19 ms
 	 */
 	public function redirect() {
-		$this->controller->redirect(Configure::read('Paysafecard.Paysafecard_URL').
+		$this->controller->redirect(Configure::read('Paysafecard.Paysafecard_URL') .
 		Router::querystring(array('cmd' => '_express-checkout')),
 		'302'
 	);
 	}
-
-
 
 	/**
 	 * SetExpressCheckout
 	 *
 	 * @param array   $nvpDataArray Daten-Array
 	 * @return array  Ergebnis-Array
-	 * @access public
 	 * @author Daniel Quappe
 	 */
 	public function setExpressCheckout() {
-
 	}
 
 	/**
@@ -80,23 +72,17 @@ class GoogleComponent extends Component {
 	 *
 	 * @param string   $token Verifizierungs-TOKEN
 	 * @return array   Ergebnis-Array
-	 * @access public
 	 * @author Daniel Quappe
 	 */
 	public function getExpressCheckoutDetails() {
-
 	}
-
 
 	public function doExpressCheckoutPayment() {
-
 	}
 
-
-
-	public function GetCurlResponse($request, $post_url) {
+	public function GetCurlResponse($request, $postUrl) {
 	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_URL, $post_url);
+	curl_setopt($ch, CURLOPT_URL, $postUrl);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
 	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
@@ -106,7 +92,7 @@ class GoogleComponent extends Component {
 	 * and HTTP headers, only executes for Order Processing API requests
 	 * and for server-to-server Checkout API requests.
 	 */
-	$pos = strpos($post_url, "request");
+	$pos = strpos($postUrl, "request");
 	if ($pos == true) {
 
 		// Set HTTP Basic Authentication scheme

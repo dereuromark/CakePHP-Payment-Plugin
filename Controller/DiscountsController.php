@@ -3,7 +3,7 @@ App::uses('PaymentAppController', 'Payment.Controller');
 
 class DiscountsController extends PaymentAppController {
 
-	public $paginate = array('order'=>array('Discount.created'=>'DESC'));
+	public $paginate = array('order' => array('Discount.created' => 'DESC'));
 
 /****************************************************************************************
  * USER functions
@@ -16,13 +16,12 @@ class DiscountsController extends PaymentAppController {
 	}
 
 	public function view($id = null) {
-		if (empty($id) || !($discount = $this->Discount->find('first', array('conditions'=>array('Discount.id'=>$id))))) {
+		if (empty($id) || !($discount = $this->Discount->find('first', array('conditions' => array('Discount.id' => $id))))) {
 			$this->Common->flashMessage(__('invalid record'), 'error');
 			$this->Common->autoRedirect(array('action' => 'index'));
 		}
 		$this->set(compact('discount'));
 	}
-
 
 /****************************************************************************************
  * ADMIN functions
@@ -30,7 +29,6 @@ class DiscountsController extends PaymentAppController {
 
 	/**
 	 * later index/overview?
-	 * 2011-05-28 ms
 	 */
 	public function admin_test() {
 		if (!empty($this->request->data['DiscountCode'])) {
@@ -42,14 +40,14 @@ class DiscountsController extends PaymentAppController {
 			} else {
 				$this->Common->flashMessage(__('Error'), 'error');
 			}
-			$this->redirect(array('action'=>'test'));
+			$this->redirect(array('action' => 'test'));
 
 		} elseif (!empty($this->request->data['Discount'])) {
 			$value = $this->request->data['Discount']['amount'];
 			# check
 			if ($check = $this->Discount->check($this->request->data['Discount']['code'], $value)) {
 				$new = Discount::calculate($value, $check['Discount']);
-				$this->Common->flashMessage(__('Wert von '.$value.' auf '.$new.' gesenkt'), 'success');
+				$this->Common->flashMessage(__('Wert von ' . $value . ' auf ' . $new . ' gesenkt'), 'success');
 			} else {
 				$this->Common->flashMessage(__('Error'), 'error');
 			}
@@ -68,7 +66,7 @@ class DiscountsController extends PaymentAppController {
 	}
 
 	public function admin_view($id = null) {
-		if (empty($id) || !($discount = $this->Discount->find('first', array('contain'=>array('DiscountCode'), 'conditions'=>array('Discount.id'=>$id))))) {
+		if (empty($id) || !($discount = $this->Discount->find('first', array('contain' => array('DiscountCode'), 'conditions' => array('Discount.id' => $id))))) {
 			$this->Common->flashMessage(__('invalid record'), 'error');
 			$this->Common->autoRedirect(array('action' => 'index'));
 		}
@@ -79,7 +77,7 @@ class DiscountsController extends PaymentAppController {
 		if ($this->Common->isPosted()) {
 			$this->Discount->create();
 			$this->Discount->Behaviors->unload('Tools.Jsonable');
-			$this->Discount->Behaviors->load('Tools.Jsonable', array('fields'=>'details', 'input'=>'param'));
+			$this->Discount->Behaviors->load('Tools.Jsonable', array('fields' => 'details', 'input' => 'param'));
 
 			if ($this->Discount->save($this->request->data)) {
 				$var = $this->request->data['Discount']['name'];
@@ -98,9 +96,9 @@ class DiscountsController extends PaymentAppController {
 
 	public function admin_edit($id = null) {
 		$this->Discount->Behaviors->unload('Tools.Jsonable');
-		$this->Discount->Behaviors->load('Tools.Jsonable', array('fields'=>'details', 'input'=>'param', 'output'=>'param'));
+		$this->Discount->Behaviors->load('Tools.Jsonable', array('fields' => 'details', 'input' => 'param', 'output' => 'param'));
 
-		if (empty($id) || !($discount = $this->Discount->find('first', array('conditions'=>array('Discount.id'=>$id))))) {
+		if (empty($id) || !($discount = $this->Discount->find('first', array('conditions' => array('Discount.id' => $id))))) {
 			$this->Common->flashMessage(__('invalid record'), 'error');
 			$this->Common->autoRedirect(array('action' => 'index'));
 		}
@@ -122,9 +120,9 @@ class DiscountsController extends PaymentAppController {
 		if (!$this->Common->isPosted()) {
 			throw new MethodNotAllowedException();
 		}
-		if (empty($id) || !($discount = $this->Discount->find('first', array('conditions'=>array('Discount.id'=>$id), 'fields'=>array('id', 'name'))))) {
+		if (empty($id) || !($discount = $this->Discount->find('first', array('conditions' => array('Discount.id' => $id), 'fields' => array('id', 'name'))))) {
 			$this->Common->flashMessage(__('invalid record'), 'error');
-			$this->Common->autoRedirect(array('action'=>'index'));
+			$this->Common->autoRedirect(array('action' => 'index'));
 		}
 		$var = $discount['Discount']['name'];
 
@@ -136,12 +134,9 @@ class DiscountsController extends PaymentAppController {
 		$this->Common->autoRedirect(array('action' => 'index'));
 	}
 
-
-
 /****************************************************************************************
  * protected/interal functions
  ****************************************************************************************/
-
 
 /****************************************************************************************
  * deprecated/test functions

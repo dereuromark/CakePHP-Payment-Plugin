@@ -4,6 +4,7 @@ App::uses('BitcoinAddress', 'Payment.Model');
 App::uses('MyCakeTestCase', 'Tools.TestSuite');
 
 class BitcoinAddressTest extends MyCakeTestCase {
+
 	public function setUp() {
 		$this->BitcoinAddress = ClassRegistry::init('BitcoinAddress');
 	}

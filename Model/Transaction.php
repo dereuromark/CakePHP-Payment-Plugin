@@ -3,7 +3,9 @@ App::uses('AppModel', 'Model');
 class Transaction extends AppModel {
 
 	public $actsAs = array();
-	public $order = array('Transaction.created'=>'DESC');
+
+	public $order = array('Transaction.created' => 'DESC');
+
 	public $skipFields = array('foreign_id', 'model', 'transaction_id', 'note', 'pending_reason', 'reason_code');
 
 	public $validate = array(
@@ -92,14 +94,13 @@ class Transaction extends AppModel {
 	 * @param array $customData
 	 * - model, foreign_id, currency_code, amount, token (required)
 	 * - title (optional)
-	 * @return mixed $success
-	 * 2011-09-23 ms
+	 * @return mixed success
 	 */
 	public function initPaypal($data) {
 		$this->create();
 		$data['type'] = 'paypal';
 		if (!isset($data['title'])) {
-			$title = $data['type'].' payment';
+			$title = $data['type'] . ' payment';
 		}
 		$this->set($data);
 		return $this->save(null, false);
@@ -108,9 +109,8 @@ class Transaction extends AppModel {
 	/**
 	 * @param array $officialPaypalReturnArray
 	 * @param array $customData (model, foreign_id, title)
-	 * @param bool $treatPendingAsCompleted if one sells digital goods (PDF file) and possesses no risk if the payment is delayed
-	 * @return mixed $result
-	 * 2011-09-23 ms
+	 * @param boolean $treatPendingAsCompleted if one sells digital goods (PDF file) and possesses no risk if the payment is delayed
+	 * @return mixed result
 	 */
 	public function updatePaypal($id, $array = array(), $treatPendingAsCompleted = false) {
 		$data = array();
@@ -150,7 +150,7 @@ class Transaction extends AppModel {
 		$data['type'] = 'sofortbanking';
 		$data['payment_type'] = 'instant';
 		if (!isset($data['title'])) {
-			$title = $data['type'].' payment';
+			$title = $data['type'] . ' payment';
 		}
 		$this->set($data);
 		return $this->save(null, false);
@@ -168,7 +168,7 @@ class Transaction extends AppModel {
 		$this->create();
 		$data['type'] = 'bank_transfer';
 		if (!isset($data['title'])) {
-			$title = $data['type'].' payment';
+			$title = $data['type'] . ' payment';
 		}
 		$this->set($data);
 		return $this->save(null, false);
@@ -178,31 +178,28 @@ class Transaction extends AppModel {
 		$this->create();
 		$data['type'] = 'skrill';
 		if (!isset($data['title'])) {
-			$title = $data['type'].' (moneybookers) payment';
+			$title = $data['type'] . ' (moneybookers) payment';
 		}
 		$this->set($data);
 		return $this->save(null, false);
 	}
 
-
-
 	public function getOwn($modelName, $foreignId, $limit = null, $type = 'all', $transactionType = null) {
 		$options = array(
-			'conditions' => array($this->alias.'.model'=>$modelName),
+			'conditions' => array($this->alias . '.model' => $modelName),
 			//'order' => array()
 		);
 		if ($foreignId !== null) {
-			$options['conditions'][$this->alias.'.foreign_id'] = $foreignId;
+			$options['conditions'][$this->alias . '.foreign_id'] = $foreignId;
 		}
 		if ($transactionType !== null) {
-			$options['conditions'][$this->alias.'.type'] = $transactionType;
+			$options['conditions'][$this->alias . '.type'] = $transactionType;
 		}
 		if ($limit !== null) {
 			$options['limit'] = $limit;
 		}
 		return $this->find($type, $options);
 	}
-
 
 	public static function is($status, $transaction) {
 		if (empty($transaction['payment_status'])) {

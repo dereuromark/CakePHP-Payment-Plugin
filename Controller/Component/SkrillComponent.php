@@ -28,7 +28,7 @@ class SkrillComponent extends Component {
 		//'shipping' => false, # do not ask for address etc
 		'prepare_only' => 1,
 		'img' => '',
-		'notifyurl' => array('admin'=>false, 'plugin'=>'payment', 'controller'=>'transactions', 'action'=>'notify', 'skrill'),
+		'notifyurl' => array('admin' => false, 'plugin' => 'payment', 'controller' => 'transactions', 'action' => 'notify', 'skrill'),
 	);
 
 	const MAX_LOGO_WIDTH = 200;
@@ -38,14 +38,12 @@ class SkrillComponent extends Component {
 	public function __construct(ComponentCollection $Collection, $settings = array()) {
 		parent::__construct($Collection, $settings);
 
-
 	}
 	*/
 
 	/**
 	 * Initialize component
 	 *
-	 * @access public
 	 * @return array
 	 * @author Daniel Quappe
 	 */
@@ -63,10 +61,9 @@ class SkrillComponent extends Component {
 	 * go the express checkout
 	 * @oparam token $sId from setExpressCheckout
 	 * @see http://www.moneybookers.com/merchant/de/moneybookers_gateway_manual.pdf
-	 * 2010-09-19 ms
 	 */
 	public function redirect($token) {
-		$this->controller->redirect($this->_url().
+		$this->controller->redirect($this->_url() .
 		Router::querystring(array('sid' => $token)),
 		'302'
 	);
@@ -75,7 +72,6 @@ class SkrillComponent extends Component {
 	/**
 	 * get current settings
 	 * @param key
-	 * 2011-09-23 ms
 	 */
 	public function get($key) {
 		if (!isset($this->settings[$key])) {
@@ -93,12 +89,10 @@ class SkrillComponent extends Component {
 		return $this->urls[$type];
 	}
 
-
 	/**
 	 * @param path
-	 * @return bool $success
+	 * @return boolean success
 	 * The image has a maximum size of 200 pixels wide by 50 pixels high.
-	 * 2010-09-19 ms
 	 */
 	public function validateImage($path) {
 		list ($width, $height) = @getimagesize($path);
@@ -108,7 +102,6 @@ class SkrillComponent extends Component {
 		return false;
 	}
 
-
 	/**
 	 * SetExpressCheckout
 	 * @see http://www.moneybookers.com/merchant/de/moneybookers_gateway_manual.pdf
@@ -117,7 +110,6 @@ class SkrillComponent extends Component {
 	 * - amount, cancelurl, successurl, detail1_description, detail1_test (all necessary, url as array)
 	 * - confirmation_node, 'detail2-5_description', 'detail2-5_text'
 	 * @return array  Ergebnis-Array
-	 * @access public
 	 * @author Daniel Quappe
 	 */
 	public function setExpressCheckout($dataArray = array()) {
@@ -135,8 +127,8 @@ class SkrillComponent extends Component {
 			'currency_code' => 'currency',
 			'locale' => 'language',
 			'successurl' => 'return_url',
-			'cancelurl'=>'cancel_url',
-			'notifyurl'=>'status_url',
+			'cancelurl' => 'cancel_url',
+			'notifyurl' => 'status_url',
 			//'img' => 'logo_url',
 		);
 		foreach ($dataArray as $key => $val) {
@@ -179,7 +171,6 @@ class SkrillComponent extends Component {
 	 *
 	 * @param string   $token Verifizierungs-TOKEN
 	 * @return array   Ergebnis-Array
-	 * @access public
 	 * @author Daniel Quappe
 	 */
 	public function getExpressCheckoutDetails($token) {
@@ -194,7 +185,6 @@ class SkrillComponent extends Component {
 	 *
 	 * @param array   $nvpDataArray Daten-Array
 	 * @return array  Ergebnis-Array
-	 * @access public
 	 * @author Daniel Quappe
 	 */
 	public function doExpressCheckoutPayment($dataArray = array()) {
@@ -239,16 +229,12 @@ class SkrillComponent extends Component {
 		return $this->_hashCall("DoExpressCheckoutPayment", $nvpDataArray);
 	}
 
-
 	/**
 	 * array(Number=>..., Message=>...)
-	 * 2011-07-08 ms
 	 */
 	public function setError($error) {
 		die(returns($error));
 	}
-
-
 
 	/**
 	 * Zentrale cURL-Methode zur Kommunikation mit Skrill
@@ -256,7 +242,6 @@ class SkrillComponent extends Component {
 	 * @param string  $methodName   API-Methode
 	 * @param array   $nvpDataArray Name-Value-Pair-Data
 	 * @return array  $nvpResArray  Ergebnis-Array
-	 * @access private
 	 * @author Daniel Quappe
 	 */
 	public function _hashCall($methodName = '', $nvpDataArray = array()) {
@@ -315,7 +300,6 @@ class SkrillComponent extends Component {
 	 * @param string  $errorMsg Error-Description
 	 * @param array   $resArray Data-Array
 	 * @return array  $resArray Extended Data-Array
-	 * @access public
 	 * @author Daniel Quappe
 	 */
 	public function _buildError($errorNo = '', $errorMsg = '', $resArray = array()) {
@@ -323,7 +307,6 @@ class SkrillComponent extends Component {
 		$resArray['Error']['Message'] = $errorMsg;
 		return $resArray;
 	}
-
 
 	/** This function will take NVPString and convert it to an Associative Array and it will decode the response.
 	 * It is usefull to search for a particular key and displaying arrays.
@@ -351,7 +334,6 @@ class SkrillComponent extends Component {
 		}
 		return $nvpArray;
 	}
-
 
 	const STATUS_PENDING = '0';
 	const STATUS_PROCESSED = '2';

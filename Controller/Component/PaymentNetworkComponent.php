@@ -3,7 +3,6 @@ App::uses('Component', 'Controller');
 App::uses('Transaction', 'Payment.Model');
 
 /**
- * 2011-12-20 ms
  */
 class PaymentNetworkComponent extends Component {
 
@@ -50,7 +49,6 @@ class PaymentNetworkComponent extends Component {
 	/**
 	 * Initialize component
 	 *
-	 * @access public
 	 * @return array
 	 * @author Daniel Quappe
 	 */
@@ -69,7 +67,6 @@ class PaymentNetworkComponent extends Component {
 	/**
 	 * get current settings
 	 * @param key
-	 * 2011-09-23 ms
 	 */
 	public function get($key) {
 		if (!isset($this->settings[$key])) {
@@ -82,7 +79,6 @@ class PaymentNetworkComponent extends Component {
 	/**
 	 * go the express checkout
 	 * @see https://www.paypal.com/en_US/ebook/PP_NVPAPI_DeveloperGuide/Appx_fieldreference.html#2830886
-	 * 2010-09-19 ms
 	 */
 	public function redirect($token) {
 
@@ -101,7 +97,7 @@ class PaymentNetworkComponent extends Component {
 	 * @param array   $dataArray
 	 * - amount (required)
 	 * - ...
-	 * @return array $res
+	 * @return array res
 	 */
 	public function setExpressCheckout($data) {
 		$defaults = array(
@@ -138,10 +134,8 @@ class PaymentNetworkComponent extends Component {
 		return;
 	}
 
-
-
 	public function getLastTransactions($limit = null) {
-		$from = date(FORMAT_DB_DATE, time()-DAY);
+		$from = date(FORMAT_DB_DATE, time() - DAY);
 		$to = date(FORMAT_DB_DATE);
 		//die(returns($this->settings));
 		$transactionDataObj = new SofortLib_TransactionData($this->_configKey());
@@ -157,24 +151,22 @@ class PaymentNetworkComponent extends Component {
 		return $transactionDataObj->getTransaction(0);
 	}
 
-
 	/**
 	 * using the classic way (without gateway)
 	 * - identification via foreign_id + model (transaction id yet unknown)
-	 * 2011-12-22 ms
 	 */
 	public function setClassicExpressCheckout($data) {
 		extract($this->settings);
 		$Sofort = new SofortLib_SofortueberweisungClassic($user, $project, $password, $hash);
-		$Sofort->setAmount($data['amount'], $currency_code);
+		$Sofort->setAmount($data['amount'], $currencyCode);
  		$Sofort->setReason(Inflector::slug($data['reason']), Inflector::slug($data['description']));
 
- 		$url = array('plugin'=>'payment', 'admin'=>false, 'controller'=>'payment_network');
- 		$abortUrl = array_merge($url, array('action'=>'abort'));
+ 		$url = array('plugin' => 'payment', 'admin' => false, 'controller' => 'payment_network');
+ 		$abortUrl = array_merge($url, array('action' => 'abort'));
  		$Sofort->setAbortUrl(Router::url($abortUrl, true));
- 		$successUrl = array_merge($url, array('action'=>'success'));
+ 		$successUrl = array_merge($url, array('action' => 'success'));
  		$Sofort->setSuccessUrl(Router::url($successUrl, true));
- 		$nUrl = array_merge($url, array('action'=>'notification'));
+ 		$nUrl = array_merge($url, array('action' => 'notification'));
  		$Sofort->setNotificationUrl(Router::url($nUrl, true));
  		if (!empty($data['token'])) {
  			$Sofort->addUserVariable($data['token']);
@@ -191,12 +183,10 @@ class PaymentNetworkComponent extends Component {
 
 	/**
 	 * using the classic way (without gateway)
-	 * 2011-12-22 ms
 	 */
 	public function classicRedirect($data) {
 		$this->Controller->redirect($data['url'], '302');
 	}
-
 
 	public function classicResponse() {
 		extract($this->settings);
@@ -204,12 +194,10 @@ class PaymentNetworkComponent extends Component {
  		return $Sofort->getNotification();
 	}
 
-
 	/**
 	 * @param path
-	 * @return bool $success
+	 * @return boolean success
 	 * The image has a minimum size of 150 pixels wide by 60 pixels high.
-	 * 2010-09-19 ms
 	 */
 	public function validateImage($path) {
 		list ($width, $height) = @getimagesize($path);
@@ -223,7 +211,6 @@ class PaymentNetworkComponent extends Component {
 	 * not implementeed
 	 */
 	public function getBalance() {
-
 	}
 
 	public function translateStatus($statusCode) {
@@ -243,7 +230,7 @@ class PaymentNetworkComponent extends Component {
 	 * @return string
 	 */
 	protected function _configKey() {
-		return $this->settings['user'].':'.$this->settings['project'].':'.$this->settings['key'];
+		return $this->settings['user'] . ':' . $this->settings['project'] . ':' . $this->settings['key'];
 	}
 
 }

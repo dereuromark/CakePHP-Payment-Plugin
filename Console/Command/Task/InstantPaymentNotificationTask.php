@@ -4,8 +4,8 @@ App::uses('AppShell', 'Console/Command');
 class InstantPaymentNotificationTask extends AppShell {
 
 	public $timeout = 120;
-	public $retries = 0;
 
+	public $retries = 0;
 
 	public function add() {
 	$this->err('Queue Email Task cannot be added via Console.');
@@ -19,10 +19,10 @@ class InstantPaymentNotificationTask extends AppShell {
 		$this->BitcoinAddress = ClassRegistry::init('Payment.BitcoinAddress');
 
 		if ($this->BitcoinAddress->update()) {
-			$this->log('Shell '.$this->name.' successfully completed', 'bitcoin');
+			$this->log('Shell ' . $this->name . ' successfully completed', 'bitcoin');
 			return true;
 		}
-		$this->log('Shell '.$this->name.' aborted', 'bitcoin');
+		$this->log('Shell ' . $this->name . ' aborted', 'bitcoin');
 		return false;
 	}
 

@@ -12,6 +12,7 @@ class BitcoinHelper extends AppHelper {
 	public $helpers = array('Html');
 
 	public $settings = array();
+
 	public $_defaults = array(
 		'places' => 2,
 		'dec' => '.',
@@ -36,29 +37,26 @@ class BitcoinHelper extends AppHelper {
 
 	/**
 	 * display payment box
-	 * 2011-07-20 ms
 	 */
 	public function paymentBox($amount, $address) {
 		if ($address === null) {
 			$address = Configure::read('Bitcoin.address');
 		}
 		$string = '<div class="bitcoinBox">';
-		$string .= '<div class="amount">'.__('Value').': '.$this->value($amount).'</div>';
-		$string .= '<code class="address">'.h($address).'</code>';
+		$string .= '<div class="amount">' . __('Value') . ': ' . $this->value($amount) . '</div>';
+		$string .= '<code class="address">' . h($address) . '</code>';
 		$string .= '</div>';
 		return $string;
 	}
 
-
 	/**
-	 * 2011-07-20 ms
 	 */
 	public function donationBox($address = null) {
 		if ($address === null) {
 			$address = Configure::read('Bitcoin.address');
 		}
 		$string = '<div class="bitcoinBox">';
-		$string .= '<code class="address">'.h($address).'</code>';
+		$string .= '<code class="address">' . h($address) . '</code>';
 		$string .= '</div>';
 		return $string;
 	}
@@ -68,10 +66,9 @@ class BitcoinHelper extends AppHelper {
 			$size = null;
 		}
 		$path = '/payment/img/bitcoin%s.png';
-		$path = sprintf($path, (String)$size);
+		$path = sprintf($path, (string)$size);
 		return $this->Html->image($path, $options);
 	}
-
 
 	public function value($amount, $maxDecimals = null) {
 		if ($maxDecimals === null) {

@@ -5,7 +5,7 @@ class BitcoinTransaction extends PaymentAppModel {
 
 	public $displayField = 'amount';
 
-	public $order = array('BitcoinTransaction.created'=>'DESC');
+	public $order = array('BitcoinTransaction.created' => 'DESC');
 
 	public $validate = array(
 		'address_id' => array(
@@ -143,7 +143,6 @@ class BitcoinTransaction extends PaymentAppModel {
 		),
 	);
 
-
 	public $belongsTo = array(
 		/*
 		'User' => array(
@@ -161,7 +160,6 @@ class BitcoinTransaction extends PaymentAppModel {
 			'order' => ''
 		)
 	);
-
 
 	public function validatePwd($data) {
 		$pwd = array_shift($data);
@@ -204,17 +202,14 @@ class BitcoinTransaction extends PaymentAppModel {
 		return $this->Bitcoin->validateAddress($address);
 	}
 
-
-
 	public function __construct($id = false, $table = false, $ds = null) {
 		App::uses('BitcoinLib', 'Payment.Lib');
 		$this->Bitcoin = new BitcoinLib();
 		parent::__construct($id, $table, $ds);
 	}
 
-
 	public function beforeDelete($cascade = true) {
-		parent::beforeDelete();
+		parent::beforeDelete($cascade);
 
 		$this->record = $this->get($this->id);
 	}
@@ -229,12 +224,11 @@ class BitcoinTransaction extends PaymentAppModel {
 	/**
 	 * via cronjob every few minutes
 	 * updates all transactions
-	 * 2011-07-16 ms
 	 */
 	public function checkTransactions() {
 		$queue = $this->find('all', array(
-			'conditions'=>array('confirmations <'=>6, 'user_id !='=>'', 'modified >'=>date(FORMAT_DB_DATE, time()-7*DAY)),
-			'order'=>array('modified'=>'ASC'), //'limit' => 20,
+			'conditions' => array('confirmations <' => 6, 'user_id !=' => '', 'modified >' => date(FORMAT_DB_DATE, time() - 7 * DAY)),
+			'order' => array('modified' => 'ASC'), //'limit' => 20,
 		));
 		foreach ($queue as $address) {
 			//$this->updateAddress($address);
@@ -250,7 +244,7 @@ class BitcoinTransaction extends PaymentAppModel {
 	/**
 	 * @param array $data
 	 * -
-	 * @return array $address
+	 * @return array address
 	 */
 	public function send($data) {
 		if (!isset($data[$this->alias]['from_account'])) {
@@ -273,7 +267,7 @@ class BitcoinTransaction extends PaymentAppModel {
 	/**
 	 * @param array $data
 	 * -
-	 * @return bool $success
+	 * @return boolean success
 	 */
 	public function move($data) {
 		if (!isset($data[$this->alias]['from_account'])) {
@@ -287,8 +281,7 @@ class BitcoinTransaction extends PaymentAppModel {
 	}
 
 	/**
-	 * @return string $account
-	 * 2011-07-20 ms
+	 * @return string account
 	 */
 	public function ownAccount() {
 		if ($account = CakeSession::read('Bitcoin.account')) {
@@ -298,8 +291,7 @@ class BitcoinTransaction extends PaymentAppModel {
 	}
 
 	/**
-	 * @return string $address or FALSE on failure
-	 * 2011-07-20 ms
+	 * @return string address or FALSE on failure
 	 */
 	public function ownAddress($addresses = array()) {
 		if ($address = CakeSession::read('Bitcoin.address')) {
@@ -334,7 +326,7 @@ class BitcoinTransaction extends PaymentAppModel {
 		}
 		$ownAccounts = array();
 		foreach ($accounts as $ownAccount => $amount) {
-			$ownAccounts[$ownAccount] = $ownAccount . ' ('.$amount.' BTC)';
+			$ownAccounts[$ownAccount] = $ownAccount . ' (' . $amount . ' BTC)';
 		}
 		return $ownAccounts;
 	}

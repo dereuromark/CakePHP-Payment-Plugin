@@ -2,14 +2,11 @@
 App::uses('PaymentAppController', 'Payment.Controller');
 class PaymentMethodsController extends PaymentAppController {
 
-
-	public $paginate = array('order'=>array('PaymentMethod.sort'=>'DESC', 'PaymentMethod.name'=>'ASC'));
+	public $paginate = array('order' => array('PaymentMethod.sort' => 'DESC', 'PaymentMethod.name' => 'ASC'));
 
 	public function beforeFilter() {
 		parent::beforeFilter();
 	}
-
-
 
 /****************************************************************************************
  * USER functions
@@ -18,13 +15,12 @@ class PaymentMethodsController extends PaymentAppController {
 	public function index() {
 		$paymentMethods = $this->paginate();
 		$this->set(compact('paymentMethods'));
-
 	}
 
 	public function propose() {
 		if ($this->Common->isPosted()) {
 			$this->request->data['PaymentMethod']['alias'] = mb_strtolower($this->request->data['PaymentMethod']['name']);
-			$this->PaymentMethod->Behaviors->load('Tools.Slugged', array('unique'=>true, 'label'=>'alias', 'slugField'=>'alias', 'mode'=>'ascii', 'separator'=>'_'));
+			$this->PaymentMethod->Behaviors->load('Tools.Slugged', array('unique' => true, 'label' => 'alias', 'slugField' => 'alias', 'mode' => 'ascii', 'separator' => '_'));
 			$this->PaymentMethod->create();
 			$this->PaymentMethod->validate['rel_rate']['range']['rule'] = array('range', -100, 100);
 			$this->PaymentMethod->validate['rel_rate']['range']['message'] = 'Please enter a number between -99.00 (-99%) and 99.00 (990%)';
@@ -53,7 +49,7 @@ class PaymentMethodsController extends PaymentAppController {
 	}
 
 	public function admin_view($id = null) {
-		if (empty($id) || !($paymentMethod = $this->PaymentMethod->find('first', array('conditions'=>array('PaymentMethod.id'=>$id))))) {
+		if (empty($id) || !($paymentMethod = $this->PaymentMethod->find('first', array('conditions' => array('PaymentMethod.id' => $id))))) {
 			$this->Common->flashMessage(__('invalid record'), 'error');
 			$this->Common->autoRedirect(array('action' => 'index'));
 		}
@@ -67,7 +63,7 @@ class PaymentMethodsController extends PaymentAppController {
 			} else {
 				$this->request->data['PaymentMethod']['alias'] = mb_strtolower($this->request->data['PaymentMethod']['alias']);
 			}
-			$this->PaymentMethod->Behaviors->load('Tools.Slugged', array('unique'=>true, 'label'=>'alias', 'slugField'=>'alias', 'mode'=>'ascii', 'separator'=>'_'));
+			$this->PaymentMethod->Behaviors->load('Tools.Slugged', array('unique' => true, 'label' => 'alias', 'slugField' => 'alias', 'mode' => 'ascii', 'separator' => '_'));
 			$this->PaymentMethod->create();
 			if ($this->PaymentMethod->save($this->request->data)) {
 				$var = $this->request->data['PaymentMethod']['name'];
@@ -87,9 +83,9 @@ class PaymentMethodsController extends PaymentAppController {
 
 	public function admin_edit($id = null) {
 		$this->PaymentMethod->Behaviors->unload('Tools.DecimalInput');
-		$this->PaymentMethod->Behaviors->load('Tools.DecimalInput', array('output'=>true));
+		$this->PaymentMethod->Behaviors->load('Tools.DecimalInput', array('output' => true));
 
-		if (empty($id) || !($paymentMethod = $this->PaymentMethod->find('first', array('conditions'=>array('PaymentMethod.id'=>$id))))) {
+		if (empty($id) || !($paymentMethod = $this->PaymentMethod->find('first', array('conditions' => array('PaymentMethod.id' => $id))))) {
 			$this->Common->flashMessage(__('invalid record'), 'error');
 			$this->Common->autoRedirect(array('action' => 'index'));
 		}
@@ -99,7 +95,7 @@ class PaymentMethodsController extends PaymentAppController {
 			} else {
 				$this->request->data['PaymentMethod']['alias'] = mb_strtolower($this->request->data['PaymentMethod']['alias']);
 			}
-			$this->PaymentMethod->Behaviors->load('Tools.Slugged', array('unique'=>true, 'label'=>'alias', 'slugField'=>'alias', 'overwrite'=>true, 'mode'=>'ascii', 'separator'=>'_'));
+			$this->PaymentMethod->Behaviors->load('Tools.Slugged', array('unique' => true, 'label' => 'alias', 'slugField' => 'alias', 'overwrite' => true, 'mode' => 'ascii', 'separator' => '_'));
 			if ($this->PaymentMethod->save($this->request->data)) {
 				$var = $this->request->data['PaymentMethod']['name'];
 				$this->Common->flashMessage(__('record edit %s saved', h($var)), 'success');
@@ -117,9 +113,9 @@ class PaymentMethodsController extends PaymentAppController {
 		if (!$this->Common->isPosted()) {
 			throw new MethodNotAllowedException();
 		}
-		if (empty($id) || !($paymentMethod = $this->PaymentMethod->find('first', array('conditions'=>array('PaymentMethod.id'=>$id), 'fields'=>array('id', 'name'))))) {
+		if (empty($id) || !($paymentMethod = $this->PaymentMethod->find('first', array('conditions' => array('PaymentMethod.id' => $id), 'fields' => array('id', 'name'))))) {
 			$this->Common->flashMessage(__('invalid record'), 'error');
-			$this->Common->autoRedirect(array('action'=>'index'));
+			$this->Common->autoRedirect(array('action' => 'index'));
 		}
 		if ($this->PaymentMethod->delete($id)) {
 			$var = $paymentMethod['PaymentMethod']['name'];
@@ -133,7 +129,6 @@ class PaymentMethodsController extends PaymentAppController {
 /****************************************************************************************
  * protected/interal functions
  ****************************************************************************************/
-
 
 /****************************************************************************************
  * deprecated/test functions

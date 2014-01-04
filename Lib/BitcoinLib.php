@@ -2,7 +2,7 @@
 
 App::import('Vendor', array('Payment.bitcoin/bitcoin'));
 if (!defined('BITCOIN_CERTIFICATE')) {
-	define('BITCOIN_CERTIFICATE', APP . 'Config' . DS.'server.cert');
+	define('BITCOIN_CERTIFICATE', APP . 'Config' . DS . 'server.cert');
 }
 
 /**
@@ -20,11 +20,11 @@ if (!defined('BITCOIN_CERTIFICATE')) {
  * v1.0
  * @author Mark Scherer
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
- * 2011-07-19 ms
  */
 class BitcoinLib extends Bitcoin {
 
 	public $C = null;
+
 	public $info = null;
 
 	public $defaults = array(
@@ -64,7 +64,6 @@ class BitcoinLib extends Bitcoin {
 
 	/**
 	 * return info about your wallet
-	 * 2011-07-13 ms
 	 */
 	public function getInfo() {
 		if ($this->info !== null) {
@@ -104,7 +103,6 @@ class BitcoinLib extends Bitcoin {
 
 	/**
 	 * moves the address to a differenc account
-	 * 2011-07-20 ms
 	 */
 	public function setAccount($address, $account = null) {
 		return $this->C->setaccount($address, $account = null);
@@ -116,7 +114,6 @@ class BitcoinLib extends Bitcoin {
 
 	/**
 	 * total amount received by address
-	 * 2011-07-16 ms
 	 */
 	public function getReceivedByAddress($address, $minconf = 1) {
 		if ($minconf === null) {
@@ -128,21 +125,21 @@ class BitcoinLib extends Bitcoin {
 		return $this->C->getreceivedbyaddress($address, $minconf);
 	}
 
-	public function listReceivedByAddress($minconf = 1, $includeempty = FALSE) {
+	public function listReceivedByAddress($minconf = 1, $includeempty = false) {
 		if ($minconf === null) {
 			$minconf = $this->settings['minconf'];
 		}
 		return $this->C->listreceivedbyaddress($minconf, $includeempty);
 	}
 
-	public function listReceivedByAccount($minconf = 1, $includeempty = FALSE) {
+	public function listReceivedByAccount($minconf = 1, $includeempty = false) {
 		if ($minconf === null) {
 			$minconf = $this->settings['minconf'];
 		}
 		return $this->C->listreceivedbyaccount($minconf, $includeempty);
 	}
 
-	public function listReceivedByLabel($minconf = 1, $includeempty = FALSE) {
+	public function listReceivedByLabel($minconf = 1, $includeempty = false) {
 		if ($minconf === null) {
 			$minconf = $this->settings['minconf'];
 		}
@@ -159,7 +156,6 @@ class BitcoinLib extends Bitcoin {
 	/**
 	 * @param string $account (defaults to own)
 	 * @param string $type (defaults to all: receive, send, move)
-	 * 2011-07-21 ms
 	 */
 	public function listTransactions($account = null, $type = null) {
 		if (!$this->settings['daemon']) {
@@ -174,12 +170,10 @@ class BitcoinLib extends Bitcoin {
 		return $this->C->query('listtransactions', $account);
 	}
 
-
 	/**
 	 * gets the balance of a specific account in your wallet
 	 * @param string $account (defaults to own)
-	 * @return int $amount or bool FALSE if offline or account not found
-	 * 2011-07-19 ms
+	 * @return integer amount or bool FALSE if offline or account not found
 	 */
 	public function getBalance($account = null) {
 		if (!$this->settings['daemon']) {
@@ -198,12 +192,10 @@ class BitcoinLib extends Bitcoin {
 		return false;
 	}
 
-
 	/**
 	 * @param string $transaction
-	 * @param bool $isMine (defaults to null): false => has to be foreign, true => has to be own
-	 * @return bool $success
-	 * 2011-07-19 ms
+	 * @param boolean $isMine (defaults to null): false => has to be foreign, true => has to be own
+	 * @return boolean success
 	 */
 	public function validateTransaction($txid, $isMine = null) {
 		if (empty($txid) || strlen($txid) != 64 || !preg_match('/^[0-9a-fA-F]+$/', $txid)) {
@@ -212,14 +204,12 @@ class BitcoinLib extends Bitcoin {
 		return true;
 	}
 
-
 	/**
 	 * @param string $address
-	 * @param bool $isMine (defaults to null): false => has to be foreign, true => has to be own
-	 * @return bool $success
+	 * @param boolean $isMine (defaults to null): false => has to be foreign, true => has to be own
+	 * @return boolean success
 	 * make sure an address is correct (length, network availability)
 	 * note: if in offline mode it will only check the length and chars
-	 * 2011-07-18 ms
 	 */
 	public function validateAddress($address, $isMine = null) {
 		/*
@@ -264,25 +254,24 @@ class BitcoinLib extends Bitcoin {
 		return $this->C->getnewaddress($account);
 	}
 
-	public function sendFrom($fromAccount = null, $toAddress, $amount, $minconf = 1, $comment = NULL, $comment_to = NULL) {
+	public function sendFrom($fromAccount = null, $toAddress, $amount, $minconf = 1, $comment = null, $commentTo = null) {
 		if ($fromAccount === null) {
 			$fromAccount = $this->settings['account'];
 		}
-		return $this->C->sendfrom($fromAccount, $toAddress, $amount, $minconf = 1, $comment = NULL, $comment_to = NULL);
+		return $this->C->sendfrom($fromAccount, $toAddress, $amount, $minconf = 1, $comment = null, $commentTo = null);
 	}
 
-	public function sendToAddress($address, $amount, $comment = NULL, $comment_to = NULL) {
+	public function sendToAddress($address, $amount, $comment = null, $commentTo = null) {
 		if (!$this->settings['daemon']) {
 			return false;
 		}
-		return $this->C->sendtoaddress($address, $amount, $comment = NULL, $comment_to);
+		return $this->C->sendtoaddress($address, $amount, $comment = null, $commentTo);
 	}
 
 	/**
 	 * transfer money from one account to another
-	 * 2011-07-20 ms
 	 */
-	public function move($fromAccount = null, $toAccount, $amount, $minconf = 1, $comment = NULL) {
+	public function move($fromAccount = null, $toAccount, $amount, $minconf = 1, $comment = null) {
 		if (!$this->settings['daemon']) {
 			return false;
 		}
@@ -299,46 +288,39 @@ class BitcoinLib extends Bitcoin {
 		return $this->C->query('settxfee', $amount);
 	}
 
-
 	/**
 	 * get number of total bitcoins in circulation
-	 * 2011-07-16 ms
 	 */
 	public function getTotalBitcoins() {
 		return (int)$this->_query('totalbc');
 	}
 
-
 	/**
 	 * shows the time at which an address was first seen on the network
-	 * 2011-07-16 ms
 	 */
 	public function addressFirstSeen($address) {
-		return $this->_query('addressfirstseen/'.$address);
+		return $this->_query('addressfirstseen/' . $address);
 	}
 
 	/**
 	 * Returns total BTC sent by an address. Using this data is almost always a very
 bad idea, as the amount of BTC sent by an address is usually very different
 from the amount of BTC sent by the person owning the address
-	 * 2011-07-16 ms
 	 */
 	public function getTotalSentByAddress($address) {
-		return $this->_query('getsentbyaddress/'.$address);
+		return $this->_query('getsentbyaddress/' . $address);
 	}
-
 
 	/**
 	 * Returns all transactions sent or received by the period-separated Bitcoin
 addresses in parameter 1. The optional parameter 2 contains a hexadecimal block
 hash: transactions in blocks up to and including this block will not be returned.
-	 * 2011-07-16 ms
 	 */
 	public function myTransactions($address, $block = null) {
 		if ($block) {
-			$address .= '/'.$block;
+			$address .= '/' . $block;
 		}
-		$res = $this->_query('mytransactions/'.$address);
+		$res = $this->_query('mytransactions/' . $address);
 		if (!empty($res)) {
 			return (array)json_decode($res);
 		}
@@ -346,8 +328,7 @@ hash: transactions in blocks up to and including this block will not be returned
 
 	/**
 	 * shows the number of blocks in the longest block chain (not including the genesis block). Equivalent to Bitcoin's getblockcount
-	 * @return int
-	 * 2011-07-16 ms
+	 * @return integer
 	 */
 	public function getBlockCount() {
 		if (!$this->settings['daemon']) {
@@ -362,8 +343,7 @@ hash: transactions in blocks up to and including this block will not be returned
 
 	/**
 	 * shows the difficulty
-	 * @return int
-	 * 2011-07-16 ms
+	 * @return integer
 	 */
 	public function getDifficulty() {
 		if (!$this->settings['daemon']) {
@@ -382,14 +362,13 @@ hash: transactions in blocks up to and including this block will not be returned
 	 * Returns total BTC received by an address. Sends are not taken into account.
 The optional second parameter specifies the required number of confirmations for
 transactions comprising the balance
-	 * @return float $amount
-	 * 2011-07-16 ms
+	 * @return float amount
 	 */
 	public function _getReceivedByAddress($address, $minconf = null) {
 		if ($minconf) {
-			$address .= '/'.$minconf;
+			$address .= '/' . $minconf;
 		}
-		return (float)$this->_query('getreceivedbyaddress/'.$address);
+		return (float)$this->_query('getreceivedbyaddress/' . $address);
 	}
 
 	/**
@@ -398,7 +377,7 @@ transactions comprising the balance
 	 * Returns 00 if the address is valid, something else otherwise.
 	 */
 	public function _checkAddress($address) {
-		$res = $this->_query('checkaddress/'.$address);
+		$res = $this->_query('checkaddress/' . $address);
 		if (empty($res) || $res !== '00') {
 			return false;
 		}
@@ -407,14 +386,13 @@ transactions comprising the balance
 
 	/**
 	 * does the actual query
-	 * 2011-07-16 ms
 	 */
 	public function _query($q) {
 		$url = 'http://blockexplorer.com/q/';
-		$res = file_get_contents($url.$q);
+		$res = file_get_contents($url . $q);
 
 		if ($res === '') {
-			trigger_error('Lookup Failed ('.$q.')');
+			trigger_error('Lookup Failed (' . $q . ')');
 			return '';
 		} elseif (strpos($res, 'ERROR: ') === 0) {
 			trigger_error(substr($res, 7));

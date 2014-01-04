@@ -3,7 +3,8 @@ App::uses('PaymentAppModel', 'Payment.Model');
 
 class PaymentMethod extends PaymentAppModel {
 
-	public $order = array('PaymentMethod.sort'=>'DESC', 'PaymentMethod.name'=>'ASC');
+	public $order = array('PaymentMethod.sort' => 'DESC', 'PaymentMethod.name' => 'ASC');
+
 	public $actsAs = array('Tools.DecimalInput');
 
 	public $validate = array(
@@ -73,12 +74,10 @@ class PaymentMethod extends PaymentAppModel {
 		),
 	);
 
-
 	public function validateRange($data, $min, $max) {
 		$val = array_shift($data);
 		return $val >= $min && $val <= $max;
 	}
-
 
 	public function validateHook($data) {
 		$val = array_shift($data);
@@ -87,7 +86,6 @@ class PaymentMethod extends PaymentAppModel {
 		}
 		return true;
 	}
-
 
 	public function beforeValidate($options = array()) {
 		parent::beforeValidate($options);
@@ -114,7 +112,6 @@ class PaymentMethod extends PaymentAppModel {
 		return $ret;
 	}
 
-
 	/**
 	 * get price (rel + set) for payment method
 	 * @param $id int PaymentMethod id
@@ -139,7 +136,6 @@ class PaymentMethod extends PaymentAppModel {
 
 	/**
 	 * @return false or array $record with updated data
-	 * 2010-09-19 ms
 	 */
 	public function vote($id) {
 		$record = $this->get($id);
@@ -147,7 +143,7 @@ class PaymentMethod extends PaymentAppModel {
 			return false;
 		}
 		$this->id = $id;
-		if (!$this->saveField('votes', $record[$this->alias]['votes']+1)) {
+		if (!$this->saveField('votes', $record[$this->alias]['votes'] + 1)) {
 			return false;
 		}
 		return $record;
@@ -155,15 +151,13 @@ class PaymentMethod extends PaymentAppModel {
 
 /** Static **/
 
-
 	/**
 	 * replace {} with name etc
 	 * @static
-	 * 2010-09-19 ms
 	 */
 	public function prep(&$record) {
 		if (isset($record['hint']) && isset($record['name'])) {
-			$record['hint'] = String::insert($record['hint'], array('name'=>$record['name']), array('before'=>'{', 'after'=>'}', 'clean'=>true));
+			$record['hint'] = String::insert($record['hint'], array('name' => $record['name']), array('before' => '{', 'after' => '}', 'clean' => true));
 		}
 	}
 
@@ -177,13 +171,11 @@ class PaymentMethod extends PaymentAppModel {
 	 * maybe call it "processor"?
 	 * Static Model::method()
 	 * @static
-	 * 2009-12-05 ms
 	 */
 	public function hooks($value = null) {
 		$options = (array)Configure::read('Payment');
 		return $options;
 		//return parent::enum($value, $options);
 	}
-
 
 }

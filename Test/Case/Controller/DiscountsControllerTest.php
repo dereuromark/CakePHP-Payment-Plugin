@@ -4,6 +4,7 @@ App::uses('DiscountsController', 'Payment.Controller');
 App::uses('MyCakeTestCase', 'Tools.TestSuite');
 
 class TestDiscountsController extends DiscountsController {
+
 	public $autoRender = false;
 
 	public function redirect($url, $status = null, $exit = true) {
@@ -12,6 +13,7 @@ class TestDiscountsController extends DiscountsController {
 }
 
 class DiscountsControllerTest extends MyCakeTestCase {
+
 	public $fixtures = array('app.discount', 'app.discount_code');
 
 	public function setUp() {
@@ -25,43 +27,33 @@ class DiscountsControllerTest extends MyCakeTestCase {
 	}
 
 	public function testIndex() {
-
 	}
 
 	public function testView() {
-
 	}
 
 	public function testAdd() {
-
 	}
 
 	public function testEdit() {
-
 	}
 
 	public function testDelete() {
-
 	}
 
 	public function testAdminIndex() {
-
 	}
 
 	public function testAdminView() {
-
 	}
 
 	public function testAdminAdd() {
-
 	}
 
 	public function testAdminEdit() {
-
 	}
 
 	public function testAdminDelete() {
-
 	}
 
 }

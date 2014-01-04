@@ -3,6 +3,7 @@ App::uses('PaymentAppController', 'Payment.Controller');
 class PaymentNetworkController extends PaymentAppController {
 
 	public $helpers = array('Tools.Numeric');
+
 	public $uses = array();
 
 	public function beforeFilter() {
@@ -17,19 +18,18 @@ class PaymentNetworkController extends PaymentAppController {
 		}
 	}
 
-
 	public function success($id = null) {
 		$Transaction = ClassRegistry::init('Payment.Transaction');
-		if (!$id || !($tId = $Transaction->field('id', array('transaction_id'=>$id)))) {
+		if (!$id || !($tId = $Transaction->field('id', array('transaction_id' => $id)))) {
 			throw new NotFoundException();
 		}
-		$this->log('OK: '.$id.' - '.returns($this->request->params), 'payment');
+		$this->log('OK: ' . $id . ' - ' . returns($this->request->params), 'payment');
 		$this->_afterSuccessRedirect($tId);
 	}
 
 	public function abort($id = null) {
-		$this->log('ABORT: '.$id.' - '.returns($this->request->params), 'payment');
-		$this->redirect(array('plugin'=>'', 'controller'=>'orders', 'action'=>'cancel', $id));
+		$this->log('ABORT: ' . $id . ' - ' . returns($this->request->params), 'payment');
+		$this->redirect(array('plugin' => '', 'controller' => 'orders', 'action' => 'cancel', $id));
 	}
 
 	//use abort?
@@ -42,7 +42,6 @@ class PaymentNetworkController extends PaymentAppController {
 
 	/**
 	 * needs to ACK with a 200 code
-	 * 2011-12-29 ms
 	 */
 	public function notification($tId = null) {
 		if (empty($this->request->data)) {
@@ -53,7 +52,7 @@ class PaymentNetworkController extends PaymentAppController {
 		$this->PaymentNetwork->initialize($this);
 		$response = $this->PaymentNetwork->classicResponse();
 		if ($response->isError()) {
-			$this->log('Payment '.$tId.': '.$response->getError(), 'sofortbanking');
+			$this->log('Payment ' . $tId . ': ' . $response->getError(), 'sofortbanking');
 			throw new MethodNotAllowedException();
 		}
 		$foreignId = $response->getUserVariable(0);
@@ -64,7 +63,7 @@ class PaymentNetworkController extends PaymentAppController {
 		}
 		$this->Transaction = ClassRegistry::init('Payment.Transaction');
 		$transaction = $this->Transaction->find('first', array(
-			'conditions'=>array('model'=>$model, 'foreign_id'=>$foreignId),
+			'conditions' => array('model' => $model, 'foreign_id' => $foreignId),
 			//'order' => array('status')
 		));
 		if (empty($transaction)) {
@@ -73,7 +72,7 @@ class PaymentNetworkController extends PaymentAppController {
 		# update transaction - we finally have a transaction id:
 		$data = array(
 			'transaction_id' => $transactionId,
-			'payment_status' => 'Completed',//$response->getStatus(),
+			'payment_status' => 'Completed', //$response->getStatus(),
 			//'reason_code' => $response->getStatusReason(),
 			//'status' => $this->PaymentNetwork->translateStatus($response->getStatus())
 			'status' => Transaction::STATUS_COMPLETED,
@@ -129,7 +128,6 @@ EXAMPLE DATA
 
 	/**
 	 *
-	 * 2011-07-30 ms
 	 */
 	public function admin_index() {
 		App::import('Component', 'Payment.PaymentNetwork');
@@ -137,20 +135,14 @@ EXAMPLE DATA
 		$this->PaymentNetwork->initialize($this);
 		$transactions = $this->PaymentNetwork->getLastTransactions();
 		die(returns($transactions));
-
 	}
 
 /****************************************************************************************
  * protected/internal functions
  ****************************************************************************************/
 
-
-
-
-
 /****************************************************************************************
  * deprecated/test functions
  ****************************************************************************************/
-
 
 }

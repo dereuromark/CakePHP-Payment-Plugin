@@ -2,6 +2,7 @@
 App::uses('ModelBehavior', 'Model');
 
 class LoadableBehavior extends ModelBehavior {
+
 	public $default = array(
 		'amounts' => array(
 			//'2' => '10',
@@ -15,8 +16,8 @@ class LoadableBehavior extends ModelBehavior {
 	public $config = array();
 
 	/**
-	* adjust configs like: $model->Behaviors-attach('GalleryStatistics', array('fields'=>array('xyz')))
-	*/
+	 * adjust configs like: $model->Behaviors-attach('GalleryStatistics', array('fields'=>array('xyz')))
+	 */
 	public function setup(Model $model, $config = array()) {
 		$this->config[$model->alias] = $this->default;
 		if ($configure = Configure::read('Loadable')) {
@@ -53,7 +54,7 @@ class LoadableBehavior extends ModelBehavior {
 			return $default;
 		}
 		$amounts = $this->loadableAmounts();
-		$count = ceil(count($amounts)/2);
+		$count = ceil(count($amounts) / 2);
 		foreach ($amounts as $amount => $total) {
 			$count--;
 			if ($count <= 0 || count($amounts) <= 1) {
@@ -62,16 +63,13 @@ class LoadableBehavior extends ModelBehavior {
 		}
 	}
 
-
 	public function finalAmount(Model $Model, $amount) {
 		$amounts = $this->loadableAmounts();
-		if (!isset($amounts[(String)intval($amount)])) {
+		if (!isset($amounts[(string)intval($amount)])) {
 			return false;
 		}
-		return $amounts[(String)intval($amount)];
+		return $amounts[(string)intval($amount)];
 	}
-
-
 
 	public function loadableAmountsText(Model $Model, $currentAmount = null) {
 		$res = array();
@@ -85,17 +83,14 @@ class LoadableBehavior extends ModelBehavior {
 			if ($currentAmount !== null && ($limit = (float)Configure::read('PrepaidAccount.limit')) > 0 && ($currentAmount + $check) > $limit) {
 				continue;
 			}
-			$text = $amount.' €';
+			$text = $amount . ' €';
 			if ($total > $amount) {
 
-				$text.= ' (+'.number_format((float)$total-(float)$amount, 2, ',', '.').' € Bonus)';
+				$text .= ' (+' . number_format((float)$total - (float)$amount, 2, ',', '.') . ' € Bonus)';
 			}
 			$res[$amount] = $text;
 		}
 		return $res;
 	}
-
-
-
 
 }

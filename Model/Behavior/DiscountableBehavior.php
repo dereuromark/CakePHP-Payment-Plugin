@@ -6,14 +6,13 @@ App::uses('ModelBehavior', 'Model');
  * @cakephp 2.0
  * @link    http://github.com/dereuromark/
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
- * 2011-11-11 ms
  */
 class DiscountableBehavior extends ModelBehavior {
 
 	public $Discount;
 
 	public function setup(Model $Model, $settings = array()) {
-		$default = array('message' => __('Please confirm the checkbox'), 'field' => 'confirm', 'model'=>null, 'before'=>'validate');
+		$default = array('message' => __('Please confirm the checkbox'), 'field' => 'confirm', 'model' => null, 'before' => 'validate');
 
 		if (!isset($this->settings[$Model->alias])) {
 			$this->settings[$Model->alias] = $default;
@@ -24,9 +23,8 @@ class DiscountableBehavior extends ModelBehavior {
 		$this->Discount = ClassRegistry::init('Discount');
 	}
 
-
-	public function beforeValidate(Model $Model) {
-		$return = parent::beforeValidate($Model);
+	public function beforeValidate(Model $Model, $options = array()) {
+		$return = parent::beforeValidate($Model, $options);
 
 		if ($this->settings[$Model->alias]['before'] === 'validate') {
 			# we dont want to return the value, because other fields might then not be validated
@@ -37,8 +35,8 @@ class DiscountableBehavior extends ModelBehavior {
 		return $return;
 	}
 
-	public function beforeSave(Model $Model) {
-		$return = parent::beforeSave($Model);
+	public function beforeSave(Model $Model, $options = array()) {
+		$return = parent::beforeSave($Model, $options);
 
 		if ($this->settings[$Model->alias]['before'] === 'save') {
 			return $this->confirm($Model, $return);
@@ -50,8 +48,8 @@ class DiscountableBehavior extends ModelBehavior {
 	/**
 	 * redeem the code
 	 */
-	public function afterSave(Model $Model, $created) {
-		parent::afterSave($Model, $created);
+	public function afterSave(Model $Model, $created, $options = array()) {
+		parent::afterSave($Model, $created, $options);
 
 		$discountCode = (array)$Model->Session->read('DiscountCode');
 		if (empty($discountCode)) {
@@ -60,13 +58,11 @@ class DiscountableBehavior extends ModelBehavior {
 		//pr($Model->data); die();
 	}
 
-
 	/**
 	 * Run before a model is saved, used...
 	 *
 	 * @param object $Model Model about to be saved.
 	 * @return boolean true if save should proceed, false otherwise
-	 * @access public
 	 */
 	public function confirm(Model $Model, $return = true) {
 		$discountCode = (array)$Model->Session->read('DiscountCode');
@@ -83,8 +79,7 @@ class DiscountableBehavior extends ModelBehavior {
 		}
 		$cartItems = $this->Order->getCartItems($orderId);
 
-
-		$discount = array_merge(array('DiscountCode'=>$discountCode), $discount);
+		$discount = array_merge(array('DiscountCode' => $discountCode), $discount);
 
 		$value = Order::calcTotal($cartItems);
 
@@ -96,6 +91,5 @@ class DiscountableBehavior extends ModelBehavior {
 		$Model->invalidate('code', $res);
 		return $return;
 	}
-
 
 }

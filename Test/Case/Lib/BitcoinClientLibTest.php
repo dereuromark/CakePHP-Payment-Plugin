@@ -5,9 +5,11 @@ App::uses('MyCakeTestCase', 'Tools.TestSuite');
 
 class BitcoinClientLibTest extends MyCakeTestCase {
 
-	public $c = NULL;
+	public $c = null;
 
 	public function setUp() {
+		parent::setUp();
+
 		$path = Configure::read('Bitcoin.config_path');
 		if (!$path) {
 			$path = APP . 'Config' . DS;
@@ -17,14 +19,12 @@ class BitcoinClientLibTest extends MyCakeTestCase {
 			return;
 		}
 
-	if (true && !extension_loaded("curl"))
-		dl("php_curl.dll");//retardation on my PHP/Win7 install
-	if (!isset($this->c))
-		$this->c = new BitcoinClient("http", "fnordbagger", "spambots", "localhost", 8332, null, 0);
-	}
-
-	public function tearDown() {
-		unset($this->c);
+		if (true && !extension_loaded("curl")) {
+			dl("php_curl.dll");//retardation on my PHP/Win7 install
+		}
+		if (!isset($this->c)) {
+			$this->c = new BitcoinClient("http", "fnordbagger", "spambots", "localhost", 8332, null, 0);
+		}
 	}
 
 	/**
@@ -92,6 +92,7 @@ class BitcoinClientLibTest extends MyCakeTestCase {
 
 	$junk = new BitcoinClient("http", "bobo", "mypass", "kremvax@kremlin.su", 3.14159);
 	}
+
 	/**
 	 * @expectedException BitcoinClientException
 	 */
@@ -102,6 +103,7 @@ class BitcoinClientLibTest extends MyCakeTestCase {
 
 	$junk = new BitcoinClient("http", "bobo", "mypass", "kremvax@kremlin.su", -273);
 	}
+
 	/**
 	 * @expectedException BitcoinClientException
 	 */
@@ -161,7 +163,7 @@ class BitcoinClientLibTest extends MyCakeTestCase {
 	$this->assertEquals($this->c->query_arg_to_parameter(3.14159), new jsonrpcval(3.14159, "double"));
 	$this->assertEquals($this->c->query_arg_to_parameter("3"), new jsonrpcval(3, "int"));
 	$this->assertEquals($this->c->query_arg_to_parameter("3.14159"), new jsonrpcval(3.14159, "double"));
-	$this->assertEquals($this->c->query_arg_to_parameter(TRUE), new jsonrpcval(TRUE, "boolean"));
+	$this->assertEquals($this->c->query_arg_to_parameter(true), new jsonrpcval(true, "boolean"));
 	$this->assertEquals($this->c->query_arg_to_parameter(array("fnord")), new jsonrpcval(array("fnord"), "array"));
 	}
 
@@ -247,9 +249,9 @@ class BitcoinClientLibTest extends MyCakeTestCase {
 			return;
 		}
 
-	$this->assertEquals($this->c->setgenerate(TRUE, 1), '');
+	$this->assertEquals($this->c->setgenerate(true, 1), '');
 	$this->assertTrue($this->c->getgenerate());
-	$this->assertEquals($this->c->setgenerate(FALSE, 0), '');
+	$this->assertEquals($this->c->setgenerate(false, 0), '');
 	$this->assertFalse($this->c->getgenerate());
 	}
 
@@ -320,7 +322,7 @@ class BitcoinClientLibTest extends MyCakeTestCase {
 	$this->markTestIncomplete();
 	}
 
-	public function testHelp($command = NULL) {
+	public function testHelp($command = null) {
 		if ($this->skipIf(WINDOWS, '%s does not work on windows')) {
 			return;
 		}
@@ -340,6 +342,7 @@ class BitcoinClientLibTest extends MyCakeTestCase {
 	 * @since 0.3.17
 	 * @todo implement
 	 */
+
 	public function testListreceivedbyaccount() {
 	$this->markTestIncomplete();
 	}

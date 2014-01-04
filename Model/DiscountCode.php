@@ -5,7 +5,7 @@ class DiscountCode extends PaymentAppModel {
 
 	public $displayField = 'code';
 
-	public $order = array('DiscountCode.created'=>'DESC');
+	public $order = array('DiscountCode.created' => 'DESC');
 
 	public $validate = array(
 		'discount_id' => array(
@@ -41,7 +41,6 @@ class DiscountCode extends PaymentAppModel {
 		),
 	);
 
-
 	public $belongsTo = array(
 		'Discount' => array(
 			'className' => 'Payment.Discount',
@@ -53,13 +52,13 @@ class DiscountCode extends PaymentAppModel {
 	);
 
 	public function findByCode($code = null) {
-		return $this->find('first', array('contain'=>array('Discount'), 'conditions'=>array($this->alias.'.code'=>$code)));
+		return $this->find('first', array('contain' => array('Discount'), 'conditions' => array($this->alias . '.code' => $code)));
 	}
 
 	/**
 	 * @param array $code (DiscountCode + Discount)
-	 * @param int $value (necessary if min/max etc is supposed to be checked)
-	 * @return bool TRUE or error message
+	 * @param integer $value (necessary if min/max etc is supposed to be checked)
+	 * @return boolean TRUE or error message
 	 */
 	public function isValid($code, $value = null) {
 		if ((int)$code[$this->alias]['used']) {
@@ -75,7 +74,7 @@ class DiscountCode extends PaymentAppModel {
 			return __('discountCodeMinAmountNotReached');
 		}
 		if (!$this->checkDate($code)) {
-			return  __('discountCodeDateInvalid');
+			return __('discountCodeDateInvalid');
 		}
 		return true;
 	}
@@ -89,7 +88,7 @@ class DiscountCode extends PaymentAppModel {
 		if(empty($code['Discount']['validity_days'])) {
 			return true;
 		}
-		$validityDate = strtotime($code['DiscountCode']['created']) + $code['Discount']['validity_days']*DAY;
+		$validityDate = strtotime($code['DiscountCode']['created']) + $code['Discount']['validity_days'] * DAY;
 		$now = time();
 		if($now <= $validityDate) {
 			return true;
@@ -99,7 +98,6 @@ class DiscountCode extends PaymentAppModel {
 
 	/**
 	 * @param length (1...32) [a-z0-9]
-	 * 2011-05-26 ms
 	 */
 	public function generateCode($length = null) {
 		$ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
@@ -108,17 +106,16 @@ class DiscountCode extends PaymentAppModel {
 				$length = 8;
 			}
 		}
-		return substr(md5($ip.microtime().rand(1,999999)), 0, $length);
+		return substr(md5($ip . microtime() . rand(1, 999999)), 0, $length);
 	}
 
 	/**
 	 * DiscountCode::setFree()
 	 * Sets a used Discountcode free, so that you can use it again
-	 * @param int $discountCodeId
-	 * 2012-03-06 gh
+	 * @param integer $discountCodeId
 	 */
 	public function setFree($discountCodeId) {
-		if($discountCode = $this->find('first', array('conditions'=>array('id'=>$discountCodeId)))) {
+		if($discountCode = $this->find('first', array('conditions' => array('id' => $discountCodeId)))) {
 			$discountCode['DiscountCode']['used'] = 0;
 			$discountCode['DiscountCode']['model'] = '';
 			$discountCode['DiscountCode']['redeemed_amount'] = 0.00;

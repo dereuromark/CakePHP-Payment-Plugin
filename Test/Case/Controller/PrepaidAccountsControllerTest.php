@@ -4,6 +4,7 @@ App::uses('PrepaidAccountsController', 'Payment.Controller');
 App::uses('MyCakeTestCase', 'Tools.TestSuite');
 
 class TestPrepaidAccountsController extends PrepaidAccountsController {
+
 	public $autoRender = false;
 
 	public function redirect($url, $status = null, $exit = true) {
@@ -12,6 +13,7 @@ class TestPrepaidAccountsController extends PrepaidAccountsController {
 }
 
 class PrepaidAccountsControllerTest extends MyCakeTestCase {
+
 	public function setUp() {
 		$this->PrepaidAccounts = new TestPrepaidAccountsController();
 		$this->PrepaidAccounts->constructClasses();

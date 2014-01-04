@@ -3,8 +3,8 @@ App::uses('PaymentAppController', 'Payment.Controller');
 
 class BitcoinController extends PaymentAppController {
 
-
 	public $helpers = array('Tools.Numeric');
+
 	public $uses = array('Payment.BitcoinTransaction');
 
 	public function beforeFilter() {
@@ -16,15 +16,12 @@ class BitcoinController extends PaymentAppController {
 		}
 	}
 
-
-
 /****************************************************************************************
  * ADMIN functions
  ****************************************************************************************/
 
 	/**
 	 * bitcoin admincenter (main overview)
-	 * 2011-07-26 ms
 	 */
 	public function admin_index() {
 		$details = $infos = array();
@@ -62,13 +59,12 @@ class BitcoinController extends PaymentAppController {
 			}
 		}
 
-
 		$this->set(compact('infos', 'details'));
 	}
 
 	public function admin_address_details($address = null) {
-		if (empty($address) || !($this->BitcoinTransaction->set(array('address'=>$address)) && $this->BitcoinTransaction->validates())) {
-			$this->Common->autoRedirect(array('action'=>'index'));
+		if (empty($address) || !($this->BitcoinTransaction->set(array('address' => $address)) && $this->BitcoinTransaction->validates())) {
+			$this->Common->autoRedirect(array('action' => 'index'));
 		}
 
 		//TODO
@@ -86,7 +82,7 @@ class BitcoinController extends PaymentAppController {
 			if ($this->BitcoinTransaction->validates()) {
 				$this->Session->write('Bitcoin.account', $this->request->data['Bitcoin']['own_account_id']);
 				$this->Common->flashMessage('Changed', 'success');
-				$this->redirect(array('action'=>'transfer'));
+				$this->redirect(array('action' => 'transfer'));
 			} else {
 				$this->BitcoinTransaction->validationErrors = array();
 				$this->Common->flashMessage('formContainsErrors', 'error');
@@ -105,7 +101,7 @@ class BitcoinController extends PaymentAppController {
 			# move
 			if ($this->BitcoinTransaction->move($this->request->data)) {
 				$this->Common->flashMessage('Transfer complete', 'success');
-				$this->redirect(array('action'=>'transfer'));
+				$this->redirect(array('action' => 'transfer'));
 			} else {
 				$this->Common->flashMessage('formContainsErrors', 'error');
 			}
@@ -115,7 +111,7 @@ class BitcoinController extends PaymentAppController {
 			try {
 				if ($this->BitcoinTransaction->send($this->request->data)) {
 					$this->Common->flashMessage('Transfer complete', 'success');
-					$this->redirect(array('action'=>'transfer'));
+					$this->redirect(array('action' => 'transfer'));
 				} else {
 					$this->Common->flashMessage('formContainsErrors', 'error');
 				}
@@ -141,12 +137,11 @@ class BitcoinController extends PaymentAppController {
 
 	/**
 	 * transaction details
-	 * 2011-07-19 ms
 	 */
 	public function admin_tx($txid = null) {
 		if (empty($txid) || !$this->BitcoinTransaction->Bitcoin->validateTransaction($txid)) {
 			$this->Common->flashMessage('Invalid Transaction', 'error');
-			$this->redirect(array('action'=>'transfer'));
+			$this->redirect(array('action' => 'transfer'));
 		}
 		$transaction = $this->BitcoinTransaction->Bitcoin->getTransaction($txid);
 		//e5b0f6297fa6743e0c2126fe5bda7b894a95bae7aae37d2695756b68468e4732
@@ -155,15 +150,13 @@ class BitcoinController extends PaymentAppController {
 
 	/**
 	 * address details
-	 * 2011-07-19 ms
 	 */
 	public function admin_address($address = null) {
 		if (empty($address) || !$this->BitcoinTransaction->Bitcoin->validateAddress($address)) {
 			$this->Common->flashMessage('Invalid Address', 'error');
-			$this->redirect(array('action'=>'transfer'));
+			$this->redirect(array('action' => 'transfer'));
 		}
 	}
-
 
 	public function admin_transactions($account = null) {
 		if (!empty($this->request->params['named']['account'])) {
@@ -191,7 +184,6 @@ class BitcoinController extends PaymentAppController {
 
 	/**
 	 * manually trigger the cronjobbed tasks
-	 * 2011-07-20 ms
 	 */
 	public function admin_run() {
 		if ($this->BitcoinTransaction->update()) {
@@ -200,20 +192,15 @@ class BitcoinController extends PaymentAppController {
 		} else {
 			$this->log('Tasks manually triggered but aborted', 'bitcoin');
 		}
-		$this->Common->autoRedirect(array('action'=>'index'));
+		$this->Common->autoRedirect(array('action' => 'index'));
 	}
 
 /****************************************************************************************
  * protected/internal functions
  ****************************************************************************************/
 
-
-
-
-
 /****************************************************************************************
  * deprecated/test functions
  ****************************************************************************************/
-
 
 }

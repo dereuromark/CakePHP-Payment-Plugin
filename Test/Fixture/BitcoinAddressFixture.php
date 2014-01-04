@@ -2,9 +2,8 @@
 /* BitcoinAddress Fixture generated on: 2011-07-16 02:07:28 : 1310777368 */
 class BitcoinAddressFixture extends CakeTestFixture {
 
-
 	public $fields = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 10, 'key' => 'primary'),
+		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10, 'key' => 'primary'),
 		'user_id' => array('type' => 'integer', 'null' => false, 'default' => '0', 'length' => 10),
 		'model' => array('type' => 'string', 'null' => false, 'length' => 30, 'collate' => 'utf8_unicode_ci', 'charset' => 'utf8'),
 		'foreign_id' => array('type' => 'integer', 'null' => false, 'default' => '0', 'length' => 10),
@@ -14,8 +13,8 @@ class BitcoinAddressFixture extends CakeTestFixture {
 		'details' => array('type' => 'string', 'null' => false, 'collate' => 'utf8_unicode_ci', 'comment' => 'can transport some information', 'charset' => 'utf8'),
 		'status' => array('type' => 'integer', 'null' => false, 'default' => '0', 'length' => 2, 'comment' => '0=freeUnusedPoolAddresses,1=inUse,2='),
 		'refund_address' => array('type' => 'string', 'null' => false, 'length' => 34, 'collate' => 'utf8_unicode_ci', 'comment' => 'only necessary if refund has to be granted', 'charset' => 'utf8'),
-		'created' => array('type' => 'datetime', 'null' => false, 'default' => NULL),
-		'modified' => array('type' => 'datetime', 'null' => false, 'default' => NULL),
+		'created' => array('type' => 'datetime', 'null' => false, 'default' => null),
+		'modified' => array('type' => 'datetime', 'null' => false, 'default' => null),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1)),
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_unicode_ci', 'engine' => 'MyISAM')
 	);

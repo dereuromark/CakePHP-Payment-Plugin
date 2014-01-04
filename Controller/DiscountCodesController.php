@@ -3,12 +3,9 @@ App::uses('PaymentAppController', 'Payment.Controller');
 
 class DiscountCodesController extends PaymentAppController {
 
+	public $paginate = array('order' => array('DiscountCode.created' => 'DESC'));
 
-	public $paginate = array('order'=>array('DiscountCode.created'=>'DESC'));
 	public $helpers = array('Payment.Discount');
-
-
-
 
 /****************************************************************************************
  * USER functions
@@ -26,7 +23,7 @@ class DiscountCodesController extends PaymentAppController {
 
 	public function admin_view($id = null) {
 		$this->DiscountCode->recursive = 0;
-		if (empty($id) || !($discountCode = $this->DiscountCode->find('first', array('conditions'=>array('DiscountCode.id'=>$id))))) {
+		if (empty($id) || !($discountCode = $this->DiscountCode->find('first', array('conditions' => array('DiscountCode.id' => $id))))) {
 			$this->Common->flashMessage(__('invalid record'), 'error');
 			$this->Common->autoRedirect(array('action' => 'index'));
 		}
@@ -47,7 +44,7 @@ class DiscountCodesController extends PaymentAppController {
 			$this->request->data['DiscountCode']['code'] = $this->DiscountCode->generateCode();
 			if ($did) {
 				$this->request->data['DiscountCode']['discount_id'] = $did;
-				$discount = $this->DiscountCode->Discount->find('first', array('conditions'=>array('id'=>$did)));
+				$discount = $this->DiscountCode->Discount->find('first', array('conditions' => array('id' => $did)));
 				if(!empty($discount['Discount']['validity_days'])) {
 					$this->request->data['DiscountCode']['validity_days'] = $discount['Discount']['validity_days'];
 				}
@@ -58,9 +55,9 @@ class DiscountCodesController extends PaymentAppController {
 	}
 
 	public function admin_add_multiple($did = null) {
-		if (empty($did) || !($discount = $this->DiscountCode->Discount->find('first', array('conditions'=>array('Discount.id'=>$did))))) {
+		if (empty($did) || !($discount = $this->DiscountCode->Discount->find('first', array('conditions' => array('Discount.id' => $did))))) {
 			$this->Common->flashMessage(__('invalid record'), 'error');
-			$this->Common->autoRedirect(array('controller'=>'discounts', 'action' => 'index'));
+			$this->Common->autoRedirect(array('controller' => 'discounts', 'action' => 'index'));
 		}
 
 		if ($this->Common->isPosted()) {
@@ -90,7 +87,7 @@ class DiscountCodesController extends PaymentAppController {
 				if (!empty($codes)) {
 					$this->Session->write('DiscountCode.batch', $codes);
 					$this->Common->flashMessage(__('%s codes generated', count($codes)), 'success');
-					$this->Common->postRedirect(array('action'=>'add_multiple', $did));
+					$this->Common->postRedirect(array('action' => 'add_multiple', $did));
 				}
 
 			} else {
@@ -99,7 +96,7 @@ class DiscountCodesController extends PaymentAppController {
 		}
 
 		if ($batch = $this->Session->read('DiscountCode.batch')) {
-			$codes = $this->DiscountCode->find('all', array('conditions'=>array('DiscountCode.id'=>$batch)));
+			$codes = $this->DiscountCode->find('all', array('conditions' => array('DiscountCode.id' => $batch)));
 			$this->set(compact('codes'));
 		}
 
@@ -112,12 +109,11 @@ class DiscountCodesController extends PaymentAppController {
 		}
 		$this->Session->delete('DiscountCode.batch');
 		$this->Common->flashMessage(__('Reset successful'), 'success');
-		$this->Common->postRedirect(array('action'=>'add_multiple', $did));
+		$this->Common->postRedirect(array('action' => 'add_multiple', $did));
 	}
 
-
 	public function admin_edit($id = null) {
-		if (empty($id) || !($discountCode = $this->DiscountCode->find('first', array('conditions'=>array('DiscountCode.id'=>$id))))) {
+		if (empty($id) || !($discountCode = $this->DiscountCode->find('first', array('conditions' => array('DiscountCode.id' => $id))))) {
 			$this->Common->flashMessage(__('invalid record'), 'error');
 			$this->Common->autoRedirect(array('action' => 'index'));
 		}
@@ -141,9 +137,9 @@ class DiscountCodesController extends PaymentAppController {
 		if (!$this->Common->isPosted()) {
 			throw new MethodNotAllowedException();
 		}
-		if (empty($id) || !($discountCode = $this->DiscountCode->find('first', array('conditions'=>array('DiscountCode.id'=>$id))))) {
+		if (empty($id) || !($discountCode = $this->DiscountCode->find('first', array('conditions' => array('DiscountCode.id' => $id))))) {
 			$this->Common->flashMessage(__('invalid record'), 'error');
-			$this->Common->autoRedirect(array('action'=>'index'));
+			$this->Common->autoRedirect(array('action' => 'index'));
 		}
 
 		if ($this->DiscountCode->delete($id)) {
@@ -154,12 +150,9 @@ class DiscountCodesController extends PaymentAppController {
 		$this->Common->autoRedirect(array('action' => 'index'));
 	}
 
-
-
 /****************************************************************************************
  * protected/interal functions
  ****************************************************************************************/
-
 
 /****************************************************************************************
  * deprecated/test functions

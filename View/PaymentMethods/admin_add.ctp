@@ -7,7 +7,7 @@
 	<?php
 		echo $this->Form->input('name');
 		echo $this->Form->input('alias', array('placeholder'=>'leer = automatisch'));
-		echo $this->Form->input('description', array('type'=>'textarea', 'class'=>'halfSize'));
+		echo $this->Form->input('description', array('type'=>'textarea'));
 		echo $this->Form->input('duration', array());
 
 		echo $this->Form->input('set_rate', array('after'=>' €'));

@@ -4,6 +4,7 @@ App::uses('DiscountCode', 'Payment.Model');
 App::uses('MyCakeTestCase', 'Tools.TestSuite');
 
 class DiscountCodeTest extends MyCakeTestCase {
+
 	public $fixtures = array('app.discount_code', 'app.discount');
 
 	public function setUp() {
@@ -31,7 +32,6 @@ class DiscountCodeTest extends MyCakeTestCase {
 		pr($is);
 		$this->assertTrue($is !== true);
 
-
 		$code = array(
 			'DiscountCode' => array(
 				'used' => 0,
@@ -44,7 +44,6 @@ class DiscountCodeTest extends MyCakeTestCase {
 		$is = $this->DiscountCode->isValid($code);
 		pr($is);
 		$this->assertTrue($is !== true);
-
 
 		$code = array(
 			'DiscountCode' => array(
@@ -59,7 +58,6 @@ class DiscountCodeTest extends MyCakeTestCase {
 		pr($is);
 		$this->assertTrue($is !== true);
 
-
 		# ok
 		$code = array(
 			'DiscountCode' => array(
@@ -72,7 +70,6 @@ class DiscountCodeTest extends MyCakeTestCase {
 		);
 		$is = $this->DiscountCode->isValid($code);
 		$this->assertTrue($is);
-
 
 		$code = array(
 			'DiscountCode' => array(
@@ -106,7 +103,7 @@ class DiscountCodeTest extends MyCakeTestCase {
 		$code = array(
 			'DiscountCode' => array(
 				'used' => 0,
-				'created' => date(FORMAT_DB_DATETIME, time()-DAY-HOUR)
+				'created' => date(FORMAT_DB_DATETIME, time() - DAY - HOUR)
 			),
 			'Discount' => array(
 				'validity_days' => '1',
@@ -122,7 +119,7 @@ class DiscountCodeTest extends MyCakeTestCase {
 		$code = array(
 			'DiscountCode' => array(
 				'used' => 0,
-				'created' => date(FORMAT_DB_DATETIME, time()-HOUR)
+				'created' => date(FORMAT_DB_DATETIME, time() - HOUR)
 			),
 			'Discount' => array(
 				'validity_days' => '1',
@@ -134,6 +131,5 @@ class DiscountCodeTest extends MyCakeTestCase {
 		pr($is);
 		$this->assertTrue($is);
 	}
-
 
 }

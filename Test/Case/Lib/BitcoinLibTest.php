@@ -36,7 +36,6 @@ class BitcoinLibTest extends MyCakeTestCase {
 	//$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
-
 	/**
 	 * Test Bitcoin::checkAddress() with various good and bad addresses.
 	 */
@@ -65,7 +64,6 @@ class BitcoinLibTest extends MyCakeTestCase {
 		$this->assertEquals(Bitcoin::remove0x("0xabcdefg"), "abcdefg");
 		$this->assertEquals(Bitcoin::remove0x("0Xabcdefg"), "abcdefg");
 	}
-
 
 	public function testGetTotalBitcoins() {
 		$res = $this->Bitcoin->getTotalBitcoins();
@@ -96,7 +94,6 @@ class BitcoinLibTest extends MyCakeTestCase {
 
 		$this->assertEquals($res, $resOffline);
 	}
-
 
 	public function testAddressFirstSeen() {
 		$res = $this->Bitcoin->addressFirstSeen('161AcnPykE42e4ErQNR9B73Bb78Jy81AN6');
@@ -139,8 +136,6 @@ class BitcoinLibTest extends MyCakeTestCase {
 		}
 	}
 
-
-
 	public function testGetReceivedByAddress() {
 		$res = $this->Bitcoin->getReceivedByAddress('1PJ3Jy1T36BzxuikZDXY5YV7YjTmfcvQNc');
 		pr($res);
@@ -154,9 +149,6 @@ class BitcoinLibTest extends MyCakeTestCase {
 		pr($res);
 		$this->assertTrue(is_numeric($res) && $res == 0);
 	}
-
-
-
 
 	public function testGetTotalSentByAddress() {
 		$res = $this->Bitcoin->getTotalSentByAddress('1PJ3Jy1T36BzxuikZDXY5YV7YjTmfcvQNc');

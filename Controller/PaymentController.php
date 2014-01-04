@@ -2,16 +2,15 @@
 App::uses('PaymentAppController', 'Payment.Controller');
 class PaymentController extends PaymentAppController {
 
-
 	public $helpers = array();
+
 	public $paginate = array();
+
 	public $uses = array();
 
 	public function beforeFilter() {
 		parent::beforeFilter();
 	}
-
-
 
 /****************************************************************************************
  * USER functions
@@ -22,13 +21,11 @@ class PaymentController extends PaymentAppController {
  ****************************************************************************************/
 
 	public function admin_index() {
-
 	}
 
 /****************************************************************************************
  * protected/interal functions
  ****************************************************************************************/
-
 
 /****************************************************************************************
  * deprecated/test functions

@@ -2,22 +2,19 @@
 App::uses('AppShell', 'Console/Command');
 
 /**
- * 2011-07-20 ms
  */
 class BitcoinShell extends AppShell {
 
 	public $uses = array();
-	public $tasks = array('InstantPaymentNotification');
 
+	public $tasks = array('InstantPaymentNotification');
 
 	/**
 	 * Overwrite shell initialize to dynamically load
 	 */
 	public function initialize() {
 		parent::initialize();
-
 	}
-
 
 	/**
 	 * Output some basic usage Info.
@@ -40,9 +37,7 @@ class BitcoinShell extends AppShell {
 		}
 	}
 
-
 	/**
-	 * 2011-07-20 ms
 	 */
 	public function enable() {
 		if (count($this->args) < 1) {
@@ -50,13 +45,11 @@ class BitcoinShell extends AppShell {
 			$this->out('       cake queue add <taskname>');
 		} else {
 
-
 		}
 	}
 
 	/**
 	 * Run a loop.
-	 * 2011-07-20 ms
 	 */
 	public function run() {
 		foreach ($this->tasks as $task) {
@@ -65,6 +58,5 @@ class BitcoinShell extends AppShell {
 
 		$this->out('Done');
 	}
-
 
 }

@@ -3,7 +3,6 @@ App::uses('Component', 'Controller');
 
 /**
  * @see http://www.paysafecard.com/de/business/downloads/downloads/technische-daten/api-client/
- * 2010-09-19 ms
  */
 class PaysafecardComponent extends Component {
 
@@ -12,6 +11,7 @@ class PaysafecardComponent extends Component {
 	public $controller = null;
 
 	public $live = false;
+
 	public $urls = array(
 		'sandbox' => array(
 			'url' => '',
@@ -26,18 +26,15 @@ class PaysafecardComponent extends Component {
 	);
 	const VERSION = 0;
 
-
 	public function __construct(ComponentCollection $Collection, $settings = array()) {
 		parent::__construct($Collection, $settings);
 
 		# modify urls if neccessary
 	}
 
-
 	/**
 	 * Initialize component
 	 *
-	 * @access public
 	 * @return array
 	 * @author Daniel Quappe
 	 */
@@ -48,27 +45,22 @@ class PaysafecardComponent extends Component {
 
 	/**
 	 * go the express checkout
-	 * 2010-09-19 ms
 	 */
 	public function redirect() {
-		$this->controller->redirect(Configure::read('Paysafecard.Paysafecard_URL').
+		$this->controller->redirect(Configure::read('Paysafecard.Paysafecard_URL') .
 		Router::querystring(array('cmd' => '_express-checkout')),
 		'302'
 	);
 	}
-
-
 
 	/**
 	 * SetExpressCheckout
 	 *
 	 * @param array   $nvpDataArray Daten-Array
 	 * @return array  Ergebnis-Array
-	 * @access public
 	 * @author Daniel Quappe
 	 */
 	public function setExpressCheckout() {
-
 	}
 
 	/**
@@ -76,17 +68,12 @@ class PaysafecardComponent extends Component {
 	 *
 	 * @param string   $token Verifizierungs-TOKEN
 	 * @return array   Ergebnis-Array
-	 * @access public
 	 * @author Daniel Quappe
 	 */
 	public function getExpressCheckoutDetails() {
-
 	}
-
 
 	public function doExpressCheckoutPayment() {
-
 	}
-
 
 }

@@ -3,9 +3,9 @@ App::uses('PaymentAppModel', 'Payment.Model');
 
 class Discount extends PaymentAppModel {
 
-	public $actsAs = array('Tools.Jsonable'=>array('fields'=>'details'));
+	public $actsAs = array('Tools.Jsonable' => array('fields' => 'details'));
 
-	public $order = array('Discount.created'=>'DESC');
+	public $order = array('Discount.created' => 'DESC');
 
 	public $validate = array(
 		'name' => array(
@@ -61,14 +61,14 @@ class Discount extends PaymentAppModel {
 		),
 		'valid_from' => array(
 			'time' => array(
-				'rule' => array('validateDatetime', array('allowEmpty'=>true)),
+				'rule' => array('validateDatetime', array('allowEmpty' => true)),
 				'message' => 'valErrMandatoryField',
 				'last' => true,
 			),
 		),
 		'valid_until' => array(
 			'time' => array(
-				'rule' => array('validateDatetime', array('allowEmpty'=>true, 'after'=>'valid_from')),
+				'rule' => array('validateDatetime', array('allowEmpty' => true, 'after' => 'valid_from')),
 				'message' => 'valErrMandatoryField',
 				'last' => true,
 			),
@@ -78,8 +78,7 @@ class Discount extends PaymentAppModel {
 	/**
 	 * validate that either amount or factor is given
 	 *
-	 * @return bool $success
-	 * 2012-02-07 ms
+	 * @return boolean success
 	 */
 	public function validateAmountOrFactor($data) {
 		$amount = array_shift($data);
@@ -89,7 +88,6 @@ class Discount extends PaymentAppModel {
 		$factor = $this->data[$this->alias]['factor'];
 		return $amount > 0 || $factor > 0 && $factor < 100;
 	}
-
 
 	public $hasMany = array(
 		'DiscountCode' => array(
@@ -102,10 +100,8 @@ class Discount extends PaymentAppModel {
 		)
 	);
 
-
 	/**
-	 * @return string $code or bool FALSE on failure
-	 * 2011-05-26 ms
+	 * @return string code or bool FALSE on failure
 	 */
 	public function createCode($discount) {
 		$data = array(
@@ -118,11 +114,9 @@ class Discount extends PaymentAppModel {
 		return false;
 	}
 
-
 	/**
 	 * @param code
-	 * @return array $code or bool FALSE on error
-	 * 2011-05-26 ms
+	 * @return array code or bool FALSE on error
 	 */
 	public function check($code, $value = null) {
 		$code = $this->DiscountCode->findByCode($code);
@@ -143,8 +137,7 @@ class Discount extends PaymentAppModel {
 	 * @param foreignId
 	 * @param model
 	 * @param additionalDataFields Fields that get saved additionally
-	 * @return bool $success or NULL if already redeemed
-	 * 2011-05-26 ms
+	 * @return boolean success or NULL if already redeemed
 	 */
 	public function redeem($code, $foreignId = null, $model = null, $additionalDataFields = array()) {
 		$code = $this->DiscountCode->findByCode($code);
@@ -180,16 +173,14 @@ class Discount extends PaymentAppModel {
 	 *
 	 * @param float $oldValue
 	 * @param array $discount['Discount']
-	 * @return float $newValue
-	 * @access static
-	 * 2011-11-13 ms
+	 * @return float newValue
 	 */
 	public static function calculate($value, $discount) {
 		if ($discount['amount'] > 0) {
 			$value = max(0, $value - $discount['amount']);
 		}
 		if ($discount['factor'] > 0) {
-			$factor = $discount['factor']/100;
+			$factor = $discount['factor'] / 100;
 			return $value - $factor * $value;
 		}
 		return $value;
@@ -200,9 +191,7 @@ class Discount extends PaymentAppModel {
 	 *
 	 * @param float $value
 	 * @param array $discount['Discount']
-	 * @return float $redeemedAmount for DiscountCode
-	 * @access static
-	 * 2011-02-23 gh
+	 * @return float redeemedAmount for DiscountCode
 	 */
 	public static function calculateRedeemedAmount($value, $discount) {
 		return $value - self::calculate($value, $discount);

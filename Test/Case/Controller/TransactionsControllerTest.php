@@ -4,6 +4,7 @@ App::uses('TransactionsController', 'Payment.Controller');
 App::uses('MyCakeTestCase', 'Tools.TestSuite');
 
 class TestTransactionsController extends TransactionsController {
+
 	public $autoRender = false;
 
 	public function redirect($url, $status = null, $exit = true) {
@@ -12,6 +13,7 @@ class TestTransactionsController extends TransactionsController {
 }
 
 class TransactionsControllerTest extends MyCakeTestCase {
+
 	public function setUp() {
 		$this->Transactions = new TestTransactionsController();
 		$this->Transactions->constructClasses();

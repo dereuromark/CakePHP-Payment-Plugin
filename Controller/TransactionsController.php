@@ -2,7 +2,6 @@
 App::uses('PaymentAppController', 'Payment.Controller');
 class TransactionsController extends PaymentAppController {
 
-
 	public $paginate = array();
 
 	public function beforeFilter() {
@@ -11,8 +10,6 @@ class TransactionsController extends PaymentAppController {
 		}
 		parent::beforeFilter();
 	}
-
-
 
 /****************************************************************************************
  * USER functions
@@ -30,11 +27,11 @@ class TransactionsController extends PaymentAppController {
 
 	public function view($id = null) {
 		$this->Transaction->recursive = 0;
-		if (empty($id) || !($transaction = $this->Transaction->find('first', array('conditions'=>array('Transaction.id'=>$id))))) {
+		if (empty($id) || !($transaction = $this->Transaction->find('first', array('conditions' => array('Transaction.id' => $id))))) {
 			$this->Common->flashMessage(__('invalid record'), 'error');
 			$this->Common->autoRedirect(array('action' => 'index'));
 		}
-		$this->Record = ClassRegistry::init('Payment.'.$transaction['Transaction']['model']);
+		$this->Record = ClassRegistry::init('Payment.' . $transaction['Transaction']['model']);
 		$record = $this->Record->get($transaction['Transaction']['foreign_id']);
 		if (!$record || $record[$transaction['Transaction']['model']]['user_id'] != $this->Session->read('Auth.User.id')) {
 			die('Invalid Access');
@@ -46,9 +43,9 @@ class TransactionsController extends PaymentAppController {
 				$this->Transaction->saveField('payment_status', Transaction::STATUS_PENDING);
 				$this->Common->flashMessage('Sobald der Geldeingang bestätigt ist, wird die Transaktion abgeschlossen.', 'success');
 				if ($transaction['Transaction']['model'] === 'PrepaidAccount') {
-					$this->Common->postRedirect(array('controller'=>'prepaid_accounts', 'action'=>'view'));
+					$this->Common->postRedirect(array('controller' => 'prepaid_accounts', 'action' => 'view'));
 				}
-				$this->Common->postRedirect(array('action'=>'view', $id));
+				$this->Common->postRedirect(array('action' => 'view', $id));
 			}
 		}
 
@@ -96,7 +93,6 @@ class TransactionsController extends PaymentAppController {
 
 	/**
 	 * note: paymentMethod required
-	 * 2011-09-30 ms
 	 */
 	public function notify($type = null) {
 		//TODO
@@ -107,17 +103,16 @@ class TransactionsController extends PaymentAppController {
 		$res['data'] = $this->request->data;
 		$res['get'] = $_GET;
 		$res['post'] = $_POST;
-		if (!file_exists(LOGS.'payment')) {
-			mkdir(LOGS.'payment', 0755);
+		if (!file_exists(LOGS . 'payment')) {
+			mkdir(LOGS . 'payment', 0755);
 		}
-		$name = strtolower($type).'_'.date(FORMAT_DB_DATE).'_'.date('H-i-s');
-		while (file_exists(LOGS.'payment'.DS.$name.(!empty($i)?'_'.$i:'').'.txt')) {
+		$name = strtolower($type) . '_' . date(FORMAT_DB_DATE) . '_' . date('H-i-s');
+		while (file_exists(LOGS . 'payment' . DS . $name . (!empty($i) ? '_' . $i : '') . '.txt')) {
 			$i = (int)$i + 1;
 		}
-		file_put_contents(LOGS.'payment'.DS.$name.(!empty($i)?'_'.$i:'').'.txt', print_r($res, true));
+		file_put_contents(LOGS . 'payment' . DS . $name . (!empty($i) ? '_' . $i : '') . '.txt', print_r($res, true));
 		die('');
 	}
-
 
 /****************************************************************************************
  * ADMIN functions
@@ -131,7 +126,7 @@ class TransactionsController extends PaymentAppController {
 
 	public function admin_view($id = null) {
 		$this->Transaction->recursive = 0;
-		if (empty($id) || !($transaction = $this->Transaction->find('first', array('conditions'=>array('Transaction.id'=>$id))))) {
+		if (empty($id) || !($transaction = $this->Transaction->find('first', array('conditions' => array('Transaction.id' => $id))))) {
 			$this->Common->flashMessage(__('invalid record'), 'error');
 			$this->Common->autoRedirect(array('action' => 'index'));
 		}
@@ -149,11 +144,10 @@ class TransactionsController extends PaymentAppController {
 				$this->Common->flashMessage(__('formContainsErrors'), 'error');
 			}
 		}
-
 	}
 
 	public function admin_edit($id = null) {
-		if (empty($id) || !($transaction = $this->Transaction->find('first', array('conditions'=>array('Transaction.id'=>$id))))) {
+		if (empty($id) || !($transaction = $this->Transaction->find('first', array('conditions' => array('Transaction.id' => $id))))) {
 			$this->Common->flashMessage(__('invalid record'), 'error');
 			$this->Common->autoRedirect(array('action' => 'index'));
 		}
@@ -175,9 +169,9 @@ class TransactionsController extends PaymentAppController {
 		if (!$this->Common->isPosted()) {
 			throw new MethodNotAllowedException();
 		}
-		if (empty($id) || !($transaction = $this->Transaction->find('first', array('conditions'=>array('Transaction.id'=>$id), 'fields'=>array('id', 'title'))))) {
+		if (empty($id) || !($transaction = $this->Transaction->find('first', array('conditions' => array('Transaction.id' => $id), 'fields' => array('id', 'title'))))) {
 			$this->Common->flashMessage(__('invalid record'), 'error');
-			$this->Common->autoRedirect(array('action'=>'index'));
+			$this->Common->autoRedirect(array('action' => 'index'));
 		}
 		$var = $transaction['Transaction']['title'];
 
@@ -189,12 +183,9 @@ class TransactionsController extends PaymentAppController {
 		$this->Common->autoRedirect(array('action' => 'index'));
 	}
 
-
-
 /****************************************************************************************
  * protected/interal functions
  ****************************************************************************************/
-
 
 /****************************************************************************************
  * deprecated/test functions

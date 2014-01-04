@@ -12,7 +12,9 @@ class PaypalHelper extends AppHelper {
 	public $helpers = array('Html', 'Form');
 
 	public $settings = array();
+
 	public $formOptions = array();
+
 	public $_defaults = array(
 		'maxDecimals' => 2,
 		'dec' => '.',
@@ -45,7 +47,7 @@ class PaypalHelper extends AppHelper {
 			$this->formOptions['server'] = 'https://www.sandbox.paypal.com';
 		}
 		$data = array('HTTP_HOST' => HTTP_HOST, 'HTTP_BASE' => HTTP_BASE);
-		$this->formOptions['notify_url'] = String::insert($this->settings['notify_url'], $data, array('before'=>'{', 'after'=>'}', 'clean'=>true));
+		$this->formOptions['notify_url'] = String::insert($this->settings['notify_url'], $data, array('before' => '{', 'after' => '}', 'clean' => true));
 		$this->formOptions['business'] = $this->settings['email'];
 		$this->formOptions['lc'] = $this->settings['locale'];
 		$this->formOptions['amount'] = $this->settings['amount'];
@@ -58,7 +60,6 @@ class PaypalHelper extends AppHelper {
 		parent::__construct($View, $settings);
 	}
 
-
 	public function value($amount, $maxDecimals = null) {
 		if ($maxDecimals === null) {
 			$maxDecimals = $this->settings['maxDecimals'];
@@ -66,10 +67,7 @@ class PaypalHelper extends AppHelper {
 		return number_format($amount, $maxDecimals, $this->settings['dec'], $this->settings['sep']);
 	}
 
-
-
 /** from PaypalIpn Plugin **/
-
 
 	/**
 	 *  function button will create a complete form button to Pay Now, Donate, Add to Cart, or Subscribe using the paypal service.
@@ -95,7 +93,6 @@ class PaypalHelper extends AppHelper {
 	 *  Test Example:
 	 *     $this->Paypal->button('Pay Now', array('test' => true, 'amount' => '12.00', 'item_name' => 'test item'));
 	 *
-	 * @access public
 	 * @param String $title takes the title of the paypal button (default "Pay Now" or "Subscribe" depending on option['type'])
 	 * @param Array $options takes an options array defaults to (configuration in /config/paypal_ipn_config.php)
 	 *
@@ -121,7 +118,7 @@ class PaypalHelper extends AppHelper {
 		switch ($options['type']) {
 			case 'subscribe': //Subscribe
 				$options['cmd'] = '_xclick-subscriptions';
-				$default_title = 'Subscribe';
+				$defaultTitle = 'Subscribe';
 				$options['no_note'] = 1;
 				$options['no_shipping'] = 1;
 				$options['src'] = 1;
@@ -131,35 +128,35 @@ class PaypalHelper extends AppHelper {
 			case 'addtocart': //Add To Cart
 				$options['cmd'] = '_cart';
 				$options['add'] = '1';
-				$default_title = 'Add To Cart';
+				$defaultTitle = 'Add To Cart';
 				break;
 			case 'viewcart': //View Cart
 				$options['cmd'] = '_cart';
 				$options['display'] = '1';
-				$default_title = 'View Cart';
+				$defaultTitle = 'View Cart';
 				break;
 			case 'donate': //Doante
 				$options['cmd'] = '_donations';
-				$default_title = 'Donate';
+				$defaultTitle = 'Donate';
 				break;
 			case 'unsubscribe': //Unsubscribe
 				$options['cmd'] = '_subscr-find';
 				$options['alias'] = $options['username'];
-				$default_title = 'Unsubscribe';
+				$defaultTitle = 'Unsubscribe';
 				break;
 			case 'cart': //upload cart
 				$options['cmd'] = '_cart';
 				$options['upload'] = 1;
-				$default_title = 'Checkout';
+				$defaultTitle = 'Checkout';
 				$options = $this->__uploadCartOptions($options);
 				break;
 			default: //Pay Now
 				$options['cmd'] = '_xclick';
-				$default_title = 'Pay Now';
+				$defaultTitle = 'Pay Now';
 				break;
 		}
 
-		$title = (empty($title)) ? $default_title : $title;
+		$title = (empty($title)) ? $defaultTitle : $title;
 		$retval = "<form action='{$options['server']}/cgi-bin/webscr' method='post'><div class='paypal-form'>";
 		unset($options['server']);
 		foreach ($options as $name => $value) {
@@ -172,10 +169,8 @@ class PaypalHelper extends AppHelper {
 
 	/**
 	 *  __hiddenNameValue constructs the name value pair in a hidden input html tag
-	 * @access private
 	 * @param String name is the name of the hidden html element.
 	 * @param String value is the value of the hidden html element.
-	 * @access private
 	 * @return Html form button and close form
 	 */
 	public function __hiddenNameValue($name, $value) {
@@ -185,7 +180,6 @@ class PaypalHelper extends AppHelper {
 	/**
 	 *  __submitButton constructs the submit button from the provided text
 	 * @param String text | text is the label of the submit button.  Can use plain text or image url.
-	 * @access private
 	 * @return Html form button and close form
 	 */
 	public function __submitButton($text) {
@@ -195,12 +189,11 @@ class PaypalHelper extends AppHelper {
 	/**
 	 * __subscriptionOptions conversts human readable subscription terms
 	 * into paypal terms if need be
-	 *  @access private
-	 *  @param array options | human readable options into paypal API options
+	 * @param array options | human readable options into paypal API options
 	 *     INT period //paypal api period of term, 2, 3, 1
 	 *     String term //paypal API term //month, year, day, week
 	 *     Float amount //paypal API amount to charge for perioud of term.
-	 *  @return array options
+	 * @return array options
 	 */
 	public function __subscriptionOptions($options = array()) {
 		//Period... every 1, 2, 3, etc.. Term
@@ -239,7 +232,6 @@ class PaypalHelper extends AppHelper {
 
 	/**
 	 * __uploadCartOptions converts an array of items into paypal friendly name/value pairs
-	 * @access private
 	 * @param array of options that will be returned with proper paypal friendly name/value pairs for items
 	 * @return array options
 	 */

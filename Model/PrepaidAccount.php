@@ -13,19 +13,18 @@ if (!defined('CLASS_USER')) {
  * features
  * - complete transaction log
  *
- * 2011-07-30 ms
  */
 class PrepaidAccount extends PaymentAppModel {
 
 	public $displayField = 'amount';
 
-	public $actsAs = array('Tools.Logable'=>array('change'=>'full'));
+	public $actsAs = array('Tools.Logable' => array('change' => 'full'));
+
 	public $order = array();
 
 	public $filterArgs = array(
 		'user_id' => array('type' => 'value'),
 	);
-
 
 	public $validate = array(
 		'user_id' => array(
@@ -65,7 +64,6 @@ class PrepaidAccount extends PaymentAppModel {
 		),
 	);
 
-
 	public $belongsTo = array(
 		'User' => array(
 			'className' => CLASS_USER,
@@ -81,9 +79,8 @@ class PrepaidAccount extends PaymentAppModel {
 		return $amount > 0 && $money >= $amount;
 	}
 
-
 	public function availableMoney($uid) {
-		$res = $this->find('first', array('conditions'=>array('user_id'=>$uid)));
+		$res = $this->find('first', array('conditions' => array('user_id' => $uid)));
 		if (!$res) {
 			return 0;
 		}
@@ -94,7 +91,6 @@ class PrepaidAccount extends PaymentAppModel {
 	 * //TODO: atomic query for more security?
 	 * use the money in the prepaid account
 	 * @return the amount the user has paid with (0 if not possible)
-	 * 2011-07-30 ms
 	 */
 	public function pay($uid, $amount = null, $transaction = true) {
 		if ($amount === null) {
@@ -113,7 +109,7 @@ class PrepaidAccount extends PaymentAppModel {
 		$this->enableLog(true);
 
 		$title = __('prepaidAccountPayTitle');
-		$this->customLog(__('paid').' ('.number_format($amount, 2).')', $this->id, array('title'=>$title));
+		$this->customLog(__('paid') . ' (' . number_format($amount, 2) . ')', $this->id, array('title' => $title));
 
 		if ($transaction) {
 			$this->Transaction = ClassRegistry::init('Payment.Transaction');
@@ -141,7 +137,7 @@ class PrepaidAccount extends PaymentAppModel {
 	 * @author gh 2011-09-13
 	 */
 	public function deposit($uid, $amount, $transaction = true) {
-		if ($this->Behaviors->attached('Loadable') && $finalAmount = $this->finalAmount($amount)) {
+		if ($this->Behaviors->loaded('Loadable') && $finalAmount = $this->finalAmount($amount)) {
 			$amount = $finalAmount;
 		}
 		$account = $this->account($uid);
@@ -157,7 +153,7 @@ class PrepaidAccount extends PaymentAppModel {
 		}
 
 		$title = __('prepaidAccountDepositTitle');
-		$this->customLog(__('deposited').' ('.number_format($amount, 2).')', $this->id, array('title'=>$title));
+		$this->customLog(__('deposited') . ' (' . number_format($amount, 2) . ')', $this->id, array('title' => $title));
 
 		if ($transaction) {
 			$this->Transaction = ClassRegistry::init('Payment.Transaction');
@@ -180,11 +176,10 @@ class PrepaidAccount extends PaymentAppModel {
 	/**
 	 * get the current account
 	 * if it does not exist it creates one!
-	 * @return array $account
-	 * 2011-07-30 ms
+	 * @return array account
 	 */
 	public function account($uid) {
-		if ($account = $this->find('first', array('conditions'=>array('user_id'=>$uid)))) {
+		if ($account = $this->find('first', array('conditions' => array('user_id' => $uid)))) {
 			return $account;
 		}
 		# create
@@ -204,7 +199,7 @@ class PrepaidAccount extends PaymentAppModel {
 	/**
 	 * PrepaidAccount::getPaymentDescription()
 	 * For PayPal or other external payment providers.
-	 * @param int $paymentAmount
+	 * @param integer $paymentAmount
 	 * @return void
 	 * 2012-01-12
 	 */
@@ -212,21 +207,20 @@ class PrepaidAccount extends PaymentAppModel {
 		App::uses('NumberLib', 'Tools.Utility');
 
 		$amount = $paymentAmount;
-		if ($this->Behaviors->attached('Loadable') && ($finalAmount = $this->finalAmount($paymentAmount)) && $finalAmount != $paymentAmount) {
+		if ($this->Behaviors->loaded('Loadable') && ($finalAmount = $this->finalAmount($paymentAmount)) && $finalAmount != $paymentAmount) {
 			$amount = $finalAmount;
 		}
 		$res = __('Account Deposition');
 		if (!$short) {
-			$res.=': '.NumberLib::money($amount);
+			$res .= ': ' . NumberLib::money($amount);
 		}
 		if ($finalAmount != $paymentAmount) {
-			$res .= ' ('.NumberLib::money($paymentAmount).' + '.NumberLib::money((float)$finalAmount-(float)$paymentAmount).' Bonus)';
+			$res .= ' (' . NumberLib::money($paymentAmount) . ' + ' . NumberLib::money((float)$finalAmount - (float)$paymentAmount) . ' Bonus)';
 		}
 		return $res;
 	}
 
 	/**
-	 * 2012-04-07 ms
 	 */
 	public static function validateTransactions(&$prepaidAccount, &$transactions) {
 		if ($prepaidAccount['amount'] == 0 && empty($transactions)) {
@@ -248,26 +242,25 @@ class PrepaidAccount extends PaymentAppModel {
 	/**
 	 * send an email with all accounts and current money to admin email
 	 * for security reasons (if DB crashes etc) and transparency
-	 * @return bool $success
-	 * 2012-01-12 ms
+	 * @return boolean success
 	 */
 	public function sendOverviewEmail() {
-		$accounts = $this->find('all', array('contain'=>array('User.email'), 'conditions'=>array($this->alias.'.amount >' => 0)));
+		$accounts = $this->find('all', array('contain' => array('User.email'), 'conditions' => array($this->alias . '.amount >' => 0)));
 		App::uses('NumericHelper', 'Tools.View/Helper');
 		$Numeric = new NumericHelper(new View(null));
 
 		$message = '';
 		$total = 0;
 		foreach ($accounts as $key => $account) {
-			$message .= '#'.str_pad($key+1, 3, '0', STR_PAD_LEFT).':'.TB.str_pad($Numeric->money($account[$this->alias]['amount']), 10, ' ', STR_PAD_LEFT).' - '.$account['User']['email'].PHP_EOL;
+			$message .= '#' . str_pad($key + 1, 3, '0', STR_PAD_LEFT) . ':' . TB . str_pad($Numeric->money($account[$this->alias]['amount']), 10, ' ', STR_PAD_LEFT) . ' - ' . $account['User']['email'] . PHP_EOL;
 			$total += $account[$this->alias]['amount'];
 		}
-		$message = __('Total').': '.$Numeric->money($total).PHP_EOL.PHP_EOL.__('Details').':'.PHP_EOL . $message;
+		$message = __('Total') . ': ' . $Numeric->money($total) . PHP_EOL . PHP_EOL . __('Details') . ':' . PHP_EOL . $message;
 
 		App::uses('EmailLib', 'Tools.Lib');
 		$this->Email = new EmailLib();
 		$this->Email->to(Configure::read('Config.admin_email'), Configure::read('Config.admin_emailname'));
-		$this->Email->subject(__('Prepaid Accounts').' - '.__('Overview'));
+		$this->Email->subject(__('Prepaid Accounts') . ' - ' . __('Overview'));
 		$this->Email->template('default', 'internal');
 		$this->Email->viewVars(compact('message', 'subject', 'emailFrom', 'nameFrom'));
 		if ($this->Email->send($message)) {

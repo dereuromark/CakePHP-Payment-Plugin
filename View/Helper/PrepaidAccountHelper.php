@@ -11,7 +11,6 @@ class PrepaidAccountHelper extends AppHelper {
 
 	public $helpers = array('Html');
 
-
 	/**
 	 *
 	 */
@@ -23,11 +22,11 @@ class PrepaidAccountHelper extends AppHelper {
 	public function radioButtons($paymentMethods) {
 		$paymentTypes = array();
 		foreach ($paymentMethods as $paymentMethod) {
-			$icon = $this->Html->image('/payment/img/'.$paymentMethod['PaymentMethod']['alias'].'.png').' ';
+			$icon = $this->Html->image('/payment/img/' . $paymentMethod['PaymentMethod']['alias'] . '.png') . ' ';
 
-			$text = $icon.h($paymentMethod['PaymentMethod']['name']);
+			$text = $icon . h($paymentMethod['PaymentMethod']['name']);
 			if (!empty($paymentMethod['PaymentMethod']['duration'])) {
-				$text .= '<br /><small>Dauer: '.h($paymentMethod['PaymentMethod']['duration']).'</small>';
+				$text .= '<br /><small>Dauer: ' . h($paymentMethod['PaymentMethod']['duration']) . '</small>';
 			}
 			$paymentTypes[$paymentMethod['PaymentMethod']['alias']] = $text;
 		}

@@ -4,19 +4,15 @@ App::uses('PaymentAppController', 'Payment.Controller');
 
 class BitcoinTransactionsController extends PaymentAppController {
 
-
 	public $paginate = array();
 
 	public function beforeFilter() {
 		parent::beforeFilter();
 	}
 
-
-
 /****************************************************************************************
  * USER functions
  ****************************************************************************************/
-
 
 /****************************************************************************************
  * ADMIN functions
@@ -29,7 +25,7 @@ class BitcoinTransactionsController extends PaymentAppController {
 	}
 
 	public function admin_view($id = null) {
-		if (empty($id) || !($bitcoinTransaction = $this->BitcoinTransaction->find('first', array('conditions'=>array('BitcoinTransaction.id'=>$id))))) {
+		if (empty($id) || !($bitcoinTransaction = $this->BitcoinTransaction->find('first', array('conditions' => array('BitcoinTransaction.id' => $id))))) {
 			$this->Common->flashMessage(__('invalid record'), 'error');
 			$this->Common->autoRedirect(array('action' => 'index'));
 		}
@@ -52,7 +48,7 @@ class BitcoinTransactionsController extends PaymentAppController {
 	}
 
 	public function admin_edit($id = null) {
-		if (empty($id) || !($bitcoinTransaction = $this->BitcoinTransaction->find('first', array('conditions'=>array('BitcoinTransaction.id'=>$id))))) {
+		if (empty($id) || !($bitcoinTransaction = $this->BitcoinTransaction->find('first', array('conditions' => array('BitcoinTransaction.id' => $id))))) {
 			$this->Common->flashMessage(__('invalid record'), 'error');
 			$this->Common->autoRedirect(array('action' => 'index'));
 		}
@@ -76,9 +72,9 @@ class BitcoinTransactionsController extends PaymentAppController {
 		if (!$this->Common->isPosted()) {
 			throw new MethodNotAllowedException();
 		}
-		if (empty($id) || !($bitcoinTransaction = $this->BitcoinTransaction->find('first', array('conditions'=>array('BitcoinTransaction.id'=>$id), 'fields'=>array('id', 'amount'))))) {
+		if (empty($id) || !($bitcoinTransaction = $this->BitcoinTransaction->find('first', array('conditions' => array('BitcoinTransaction.id' => $id), 'fields' => array('id', 'amount'))))) {
 			$this->Common->flashMessage(__('invalid record'), 'error');
-			$this->Common->autoRedirect(array('action'=>'index'));
+			$this->Common->autoRedirect(array('action' => 'index'));
 		}
 		$var = $bitcoinTransaction['BitcoinTransaction']['amount'];
 
@@ -90,12 +86,9 @@ class BitcoinTransactionsController extends PaymentAppController {
 		$this->Common->autoRedirect(array('action' => 'index'));
 	}
 
-
-
 /****************************************************************************************
  * protected/interal functions
  ****************************************************************************************/
-
 
 /****************************************************************************************
  * deprecated/test functions

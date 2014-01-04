@@ -4,16 +4,14 @@ App::uses('PaymentAppController', 'Payment.Controller');
 class PrepaidAccountsController extends PaymentAppController {
 
 	public $helpers = array('Tools.Numeric');
+
 	public $paginate = array();
 
 	public $presetVars = true;
 
 	public function beforeFilter() {
 		parent::beforeFilter();
-
 	}
-
-
 
 /****************************************************************************************
  * USER functions
@@ -27,7 +25,7 @@ class PrepaidAccountsController extends PaymentAppController {
 
 		$amounts = $this->PrepaidAccount->loadableAmountsText($amount);
 		$this->PaymentMethod = ClassRegistry::init('Payment.PaymentMethod');
-		$paymentMethods = $this->PaymentMethod->find('all', array('conditions'=>array('active'=>1, 'alias !='=>'prepaid')));// array('1'=>'Paypal');
+		$paymentMethods = $this->PaymentMethod->find('all', array('conditions' => array('active' => 1, 'alias !=' => 'prepaid')));// array('1'=>'Paypal');
 
 		$this->Transaction = ClassRegistry::init('Payment.Transaction');
 
@@ -50,12 +48,12 @@ class PrepaidAccountsController extends PaymentAppController {
 		}
 
 		$cond = array(
-			'Transaction.model'=>'PrepaidAccount',
-			'Transaction.foreign_id'=>$account['PrepaidAccount']['id'],
+			'Transaction.model' => 'PrepaidAccount',
+			'Transaction.foreign_id' => $account['PrepaidAccount']['id'],
 			'Transaction.status' => array(Transaction::STATUS_NEW, Transaction::STATUS_PENDING),
 			'Transaction.type !=' => 'prepaid',
 		);
-		$pendingTransaction = $this->Transaction->find('first', array('conditions'=>$cond));
+		$pendingTransaction = $this->Transaction->find('first', array('conditions' => $cond));
 
 		$transactions = $this->Transaction->getOwn('PrepaidAccount', $account['PrepaidAccount']['id'], 50, 'all', 'prepaid');
 		$transactionTotal = $this->Transaction->getOwn('PrepaidAccount', $account['PrepaidAccount']['id'], null, 'count', 'prepaid');
@@ -70,10 +68,10 @@ class PrepaidAccountsController extends PaymentAppController {
 				$this->Common->loadComponent(array('Payment.Paypal'));
 				$array = array(
 					'amount' => $data['PrepaidAccount']['charge_amount'],
-					'returnurl' => array('action'=>'deposit'),
-					'cancelurl' => array('action'=>'view'),
-					'successurl' => array('action'=>'deposit', 'ok'=>1),
-					'desc'=> $this->PrepaidAccount->getPaymentDescription($data['PrepaidAccount']['charge_amount'])
+					'returnurl' => array('action' => 'deposit'),
+					'cancelurl' => array('action' => 'view'),
+					'successurl' => array('action' => 'deposit', 'ok' => 1),
+					'desc' => $this->PrepaidAccount->getPaymentDescription($data['PrepaidAccount']['charge_amount'])
 				);
 				$res = $this->Paypal->setExpressCheckout($array);
 
@@ -108,7 +106,7 @@ class PrepaidAccountsController extends PaymentAppController {
 					'currency_code' => 'EUR',
 				);
 				$this->Transaction->initBankTransfer($array);
-				$this->redirect(array('controller'=>'transactions', 'action'=>'view', $this->Transaction->id));
+				$this->redirect(array('controller' => 'transactions', 'action' => 'view', $this->Transaction->id));
 
 			case 'skrill':
 				# MoneyBookers
@@ -118,10 +116,10 @@ class PrepaidAccountsController extends PaymentAppController {
 					'detail1_description' => __('Account Deposition'),
 					'detail1_text' => __('Prepaid Account'),
 				);
-				$res =  $this->Skrill->setExpressCheckout($array);
+				$res = $this->Skrill->setExpressCheckout($array);
 				if (!$res) {
 					$this->Common->flashMessage(__('Invalid Argument'));
-					$this->redirect(array('action'=>'view'));
+					$this->redirect(array('action' => 'view'));
 				}
 				$array = array(
 					'amount' => $data['PrepaidAccount']['charge_amount'],
@@ -150,7 +148,7 @@ class PrepaidAccountsController extends PaymentAppController {
 				$res = $this->PaymentNetwork->setClassicExpressCheckout($array);
 				if (!$res) {
 					$this->Common->flashMessage(__('Invalid Argument'));
-					$this->redirect(array('action'=>'view'));
+					$this->redirect(array('action' => 'view'));
 				}
 				$data = array(
 					'title' => __('Account Deposition from %s', $this->Session->read('Auth.User.email')),
@@ -166,10 +164,8 @@ class PrepaidAccountsController extends PaymentAppController {
 		$this->Common->flashMessage(__('Invalid Argument'));
 	}
 
-
 	/**
 	 * load money into prepaid account
-	 * 2011-09-23 ms
 	 */
 	public function deposit($id = null) {
 		$this->PrepaidAccount->Behaviors->load('Payment.Loadable');
@@ -181,10 +177,10 @@ class PrepaidAccountsController extends PaymentAppController {
 		$payerId = $this->request->query('PayerID');
 
 		$this->Transaction = ClassRegistry::init('Payment.Transaction');
-		$transaction = $this->Transaction->find('first', array('conditions'=>array('Transaction.model'=>'PrepaidAccount', 'Transaction.token'=>$token)));
+		$transaction = $this->Transaction->find('first', array('conditions' => array('Transaction.model' => 'PrepaidAccount', 'Transaction.token' => $token)));
 		if (!$transaction) { //
 			throw new MethodNotAllowedException(__('Invalid Access'));
-			$this->Common->autoRedirect(array('action'=>'view'));
+			$this->Common->autoRedirect(array('action' => 'view'));
 		}
 
 		$res = $this->Paypal->getExpressCheckoutDetails($token);
@@ -219,15 +215,14 @@ class PrepaidAccountsController extends PaymentAppController {
 				$title .= ' ('.number_format((float)$amount-(float)$transaction['Transaction']['amount'], 2, ',', '.').' € + Bonus)';
 			}
 			*/
-			$this->PrepaidAccount->deposit($this->Session->read('Auth.User.id'), $amount, array('title'=>$title));
+			$this->PrepaidAccount->deposit($this->Session->read('Auth.User.id'), $amount, array('title' => $title));
 			$this->Common->flashMessage('Einzahlung erfolgreich abgeschlossen', 'success');
 		} else {
 			$this->Common->flashMessage('Einzahlung ist erfolgt, konnte aber noch nicht gutgeschrieben werden.', 'warning');
 		}
 
-		$this->redirect(array('action'=>'view'));
+		$this->redirect(array('action' => 'view'));
 	}
-
 
 /****************************************************************************************
  * ADMIN functions
@@ -236,21 +231,20 @@ class PrepaidAccountsController extends PaymentAppController {
 	/**
 	 * validate that all transactions sum up to the current balance!
 	 *
-	 * 2012-04-07 ms
 	 */
 	public function admin_validate() {
 		$this->PrepaidAccount = ClassRegistry::init('Payment.PrepaidAccount');
 		//$prepaidAccount = $this->PrepaidAccount->availableMoney($this->Session->read('Auth.User.id'));
-		$prepaidAccounts = $this->PrepaidAccount->find('all', array('contain'=>array('User'), 'conditions'=>array('amount >'=>0)));
+		$prepaidAccounts = $this->PrepaidAccount->find('all', array('contain' => array('User'), 'conditions' => array('amount >' => 0)));
 
 		$transactions = array();
-		$stats = array('error'=>0, 'ok'=>0);
+		$stats = array('error' => 0, 'ok' => 0);
 
 		$this->Transaction = ClassRegistry::init('Payment.Transaction');
 		foreach ($prepaidAccounts as $key => $prepaidAccount) {
 			$id = $prepaidAccount['PrepaidAccount']['id'];
 			$options = array(
-				'conditions'=>array(
+				'conditions' => array(
 					'Transaction.model' => 'PrepaidAccount',
 					'Transaction.foreign_id' => $id,
 					'Transaction.status' => Transaction::STATUS_COMPLETED,
@@ -271,16 +265,16 @@ class PrepaidAccountsController extends PaymentAppController {
 	}
 
 	public function admin_repair($id = null) {
-		if (empty($id) || !($prepaidAccount = $this->PrepaidAccount->find('first', array('contain'=>array(), 'conditions'=>array('PrepaidAccount.id'=>$id))))) {
+		if (empty($id) || !($prepaidAccount = $this->PrepaidAccount->find('first', array('contain' => array(), 'conditions' => array('PrepaidAccount.id' => $id))))) {
 			$this->Common->flashMessage(__('invalid record'), 'error');
 			$this->Common->autoRedirect(array('action' => 'index'));
 		}
 		$id = $prepaidAccount['PrepaidAccount']['id'];
 		$this->Transaction = ClassRegistry::init('Payment.Transaction');
 		$options = array(
-			'conditions'=>array(
-				'Transaction.model'=>'PrepaidAccount',
-				'Transaction.foreign_id'=>$id,
+			'conditions' => array(
+				'Transaction.model' => 'PrepaidAccount',
+				'Transaction.foreign_id' => $id,
 				'Transaction.status' => Transaction::STATUS_COMPLETED,
 				'Transaction.type' => 'prepaid',
 			)
@@ -292,7 +286,7 @@ class PrepaidAccountsController extends PaymentAppController {
 
 		if (!$difference) {
 			$this->Common->flashMessage(__('Nothing needs to be corrected here'), 'error');
-			$this->Common->autoRedirect(array('action'=>'validate'));
+			$this->Common->autoRedirect(array('action' => 'validate'));
 		}
 
 		$data = array(
@@ -304,7 +298,7 @@ class PrepaidAccountsController extends PaymentAppController {
 		);
 		$this->Transaction->initCustom('prepaid', $data);
 		$this->Common->flashMessage(__('Corrected'), 'success');
-		$this->Common->autoRedirect(array('action'=>'validate'));
+		$this->Common->autoRedirect(array('action' => 'validate'));
 	}
 
 	public function admin_index() {
@@ -322,7 +316,7 @@ class PrepaidAccountsController extends PaymentAppController {
 		$users = $this->PrepaidAccount->User->find('list');
 		if (!empty($this->request->data['PrepaidAccount']['user_id'])) {
 			if (!array_key_exists($this->request->data['PrepaidAccount']['user_id'], $users)) {
-				$users['-'] = ' - '.__('invalidSearchValue').' - ';
+				$users['-'] = ' - ' . __('invalidSearchValue') . ' - ';
 				$this->request->data['PrepaidAccount']['user_id'] = '-';
 			}
 		}
@@ -332,10 +326,9 @@ class PrepaidAccountsController extends PaymentAppController {
 	/**
 	 * void the prepaid account or make a payout to this user (cash, transfer, ...)
 	 *
-	 * 2012-04-07 ms
 	 */
 	public function admin_payout($id = null) {
-		if (empty($id) || !($prepaidAccount = $this->PrepaidAccount->find('first', array('contain'=>array('User'), 'conditions'=>array('PrepaidAccount.id'=>$id))))) {
+		if (empty($id) || !($prepaidAccount = $this->PrepaidAccount->find('first', array('contain' => array('User'), 'conditions' => array('PrepaidAccount.id' => $id))))) {
 			$this->Common->flashMessage(__('invalid record'), 'error');
 			$this->Common->autoRedirect(array('action' => 'index'));
 		}
@@ -374,14 +367,14 @@ class PrepaidAccountsController extends PaymentAppController {
 	}
 
 	public function admin_view($id = null) {
-		if (empty($id) || !($prepaidAccount = $this->PrepaidAccount->find('first', array('contain'=>array('User'), 'conditions'=>array('PrepaidAccount.id'=>$id))))) {
+		if (empty($id) || !($prepaidAccount = $this->PrepaidAccount->find('first', array('contain' => array('User'), 'conditions' => array('PrepaidAccount.id' => $id))))) {
 			$this->Common->flashMessage(__('invalid record'), 'error');
 			$this->Common->autoRedirect(array('action' => 'index'));
 		}
-		$logEntries = $this->PrepaidAccount->findLog(array('foreign_id'=>$id));
+		$logEntries = $this->PrepaidAccount->findLog(array('foreign_id' => $id));
 
 		$this->Transaction = ClassRegistry::init('Payment.Transaction');
-		$options = array('conditions'=>array('Transaction.model'=>'PrepaidAccount', 'Transaction.foreign_id'=>$id));
+		$options = array('conditions' => array('Transaction.model' => 'PrepaidAccount', 'Transaction.foreign_id' => $id));
 		$transactions = $this->Transaction->find('all', $options);
 
 		$this->set(compact('prepaidAccount', 'logEntries', 'transactions'));
@@ -424,7 +417,7 @@ class PrepaidAccountsController extends PaymentAppController {
 	}
 
 	public function admin_edit($id = null) {
-		if (empty($id) || !($prepaidAccount = $this->PrepaidAccount->find('first', array('conditions'=>array('PrepaidAccount.id'=>$id))))) {
+		if (empty($id) || !($prepaidAccount = $this->PrepaidAccount->find('first', array('conditions' => array('PrepaidAccount.id' => $id))))) {
 			$this->Common->flashMessage(__('invalid record'), 'error');
 			$this->Common->autoRedirect(array('action' => 'index'));
 		}
@@ -479,9 +472,9 @@ class PrepaidAccountsController extends PaymentAppController {
 			$continue = $this->PrepaidAccount->validates();
 		}
 		if ($continue) {
-			if (empty($id) || !($prepaidAccount = $this->PrepaidAccount->find('first', array('conditions'=>array('PrepaidAccount.id'=>$id), 'fields'=>array('id', 'amount'))))) {
+			if (empty($id) || !($prepaidAccount = $this->PrepaidAccount->find('first', array('conditions' => array('PrepaidAccount.id' => $id), 'fields' => array('id', 'amount'))))) {
 				$this->Common->flashMessage(__('invalid record'), 'error');
-				$this->Common->autoRedirect(array('action'=>'index'));
+				$this->Common->autoRedirect(array('action' => 'index'));
 			}
 			$var = $prepaidAccount['PrepaidAccount']['amount'];
 
@@ -494,12 +487,9 @@ class PrepaidAccountsController extends PaymentAppController {
 		}
 	}
 
-
-
 /****************************************************************************************
  * protected/interal functions
  ****************************************************************************************/
-
 
 /****************************************************************************************
  * deprecated/test functions

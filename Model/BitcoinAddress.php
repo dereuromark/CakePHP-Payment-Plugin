@@ -6,8 +6,8 @@ class BitcoinAddress extends PaymentAppModel {
 	public $displayField = 'address';
 
 	public $actsAs = array();
-	public $order = array('BitcoinAddress.created'=>'DESC');
 
+	public $order = array('BitcoinAddress.created' => 'DESC');
 
 	public $validate = array(
 		'account' => array(
@@ -37,8 +37,6 @@ class BitcoinAddress extends PaymentAppModel {
 		),
 	);
 
-
-
 	public $hasMany = array(
 		'BitcoinTransaction' => array(
 			'className' => 'Payment.BitcoinTransaction',
@@ -50,30 +48,23 @@ class BitcoinAddress extends PaymentAppModel {
 		),
 	);
 
-
 	/**
 	 * update transaction count etc for a given address
-	 * 2011-07-20 ms
 	 */
 	public function updateAddress($address) {
-
 	}
-
 
 	/**
 	 * from a shell cronjob it can make sure there are always unused address available
 	 * neccessary for security reasons (backuped wallets cannot transfer money anymore otherwise)
 	 * and for a quick response time (takes time to create on on the fly)
 	 * TODO: also clear old unused ones for further use
-	 * 2011-07-20 ms
 	 */
 	public function guaranteeFreeAddresses($amount = 5) {
-
 	}
 
 	/**
 	 * use this address in the future if transaction was canceled and address is still unused
-	 * 2011-07-26 ms
 	 */
 	public function resetIfUnused($id) {
 		$res = $this->get($id);
@@ -90,10 +81,8 @@ class BitcoinAddress extends PaymentAppModel {
 
 	/**
 	 * complete update
-	 * 2011-07-20 ms
 	 */
 	public function update() {
-
 
 		return true;
 	}

@@ -4,6 +4,7 @@ App::uses('PrepaidAccount', 'Payment.Model');
 App::uses('MyCakeTestCase', 'Tools.TestSuite');
 
 class PrepaidAccountTest extends MyCakeTestCase {
+
 	public $fixtures = array('plugin.payment.PrepaidAccount', 'plugin.tools.Log', 'user');
 
 	public $PrepaidAccount = null;
@@ -17,7 +18,6 @@ class PrepaidAccountTest extends MyCakeTestCase {
 		ClassRegistry::flush();
 	}
 
-
 	public function testAccount() {
 		$this->PrepaidAccount->truncate();
 		//$this->PrepaidAccount->Log->truncate();
@@ -25,7 +25,6 @@ class PrepaidAccountTest extends MyCakeTestCase {
 		$account = $this->PrepaidAccount->account('x');
 		pr($account);
 		$this->assertTrue(!empty($account) && is_array($account));
-
 
 		$res = $this->PrepaidAccount->pay('x', 2);
 		$this->assertSame(0, $res);
@@ -39,7 +38,6 @@ class PrepaidAccountTest extends MyCakeTestCase {
 		$this->assertSame(1.90, $res);
 		$current = $this->PrepaidAccount->availableMoney('x');
 		$this->assertEquals(0.10, $current);
-
 	}
 
 	public function testSendOverviewEmail() {

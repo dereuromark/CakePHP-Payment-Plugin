@@ -8,8 +8,6 @@ App::uses('Component', 'Controller');
  * see https://www.paypal.com/IntegrationCenter/sdk/PayPal_PHP_NVP_Samples.zip
  * see http://bakery.cakephp.org/articles/view/paypal-payments-component-using-curl
  *
- * @package         default
- * @subpackage      app
  * @version         $Revision: 94 $ ($Date: 2010-02-14 15:51:06 +0100 (So, 14 Feb 2010) $)
  * @author          Created by Daniel Quappe on 11.02.2010 14:08:36. Last Editor: $Author: dan $
  * @copyright       Copyright (c) 2010 Daniel Quappe. All rights reserved.
@@ -19,7 +17,6 @@ App::uses('Component', 'Controller');
  * TODO: move call part to Lib..
  * Paypal Payment API Component class file.
  * Added new methods
- * 2010-09-19 ms
  */
 class PaypalComponent extends Component {
 
@@ -70,7 +67,6 @@ class PaypalComponent extends Component {
 	/**
 	 * Initialize component
 	 *
-	 * @access public
 	 * @return array
 	 * @author Daniel Quappe
 	 */
@@ -81,17 +77,15 @@ class PaypalComponent extends Component {
 	/**
 	 * go the express checkout
 	 * @see https://www.paypal.com/en_US/ebook/PP_NVPAPI_DeveloperGuide/Appx_fieldreference.html#2830886
-	 * 2010-09-19 ms
 	 */
 	public function redirect($token) {
-		$this->Controller->redirect($this->_url().
+		$this->Controller->redirect($this->_url() .
 		Router::querystring(array('cmd' => '_express-checkout', 'token' => $token)), '302');
 	}
 
 	/**
 	 * get current settings
 	 * @param key
-	 * 2011-09-23 ms
 	 */
 	public function get($key) {
 		if (!isset($this->settings[$key])) {
@@ -117,12 +111,10 @@ class PaypalComponent extends Component {
 		return $this->urls[$type]['api'];
 	}
 
-
 	/**
 	 * @param path
-	 * @return bool $success
+	 * @return boolean success
 	 * The image has a maximum size of 750 pixels wide by 90 pixels high.
-	 * 2010-09-19 ms
 	 */
 	public function validateImage($path) {
 		list ($width, $height) = @getimagesize($path);
@@ -132,7 +124,6 @@ class PaypalComponent extends Component {
 		return false;
 	}
 
-
 	/**
 	 * SetExpressCheckout
 	 * @see https://www.paypalobjects.com/de_DE/pdf/PayPal-NVP-API-Reference-Germany.pdf - page 37
@@ -141,7 +132,6 @@ class PaypalComponent extends Component {
 	 * - amount, cancelurl, pendingurl (all recommended, url as array)
 	 * - email, desc, custom, invnum, addroverride
 	 * @return array  Ergebnis-Array
-	 * @access public
 	 * @author Daniel Quappe
 	 */
 	public function setExpressCheckout($dataArray) {
@@ -167,7 +157,6 @@ class PaypalComponent extends Component {
 			$nvpDataArray['NOSHIPPING'] = 1;
 		}
 
-
 		$map = array(
 			'amount' => 'AMT',
 			'style' => 'PAGESTYLE',
@@ -179,8 +168,8 @@ class PaypalComponent extends Component {
 			'addroverride' => 'ADDROVERRIDE',
 			'custom' => 'CUSTOM',
 			'successurl' => 'GIROPAYSUCCESSURL',
-			'cancelurl'=>'GIROPAYCANCELURL',
-			'pendingurl'=>'BANKTXNPENDINGURL',
+			'cancelurl' => 'GIROPAYCANCELURL',
+			'pendingurl' => 'BANKTXNPENDINGURL',
 			'desc' => 'DESC',
 		);
 		foreach ($dataArray as $key => $val) {
@@ -204,7 +193,6 @@ class PaypalComponent extends Component {
 	 *
 	 * @param string   $token Verifizierungs-TOKEN
 	 * @return array   Ergebnis-Array
-	 * @access public
 	 * @author Daniel Quappe
 	 */
 	public function getExpressCheckoutDetails($token) {
@@ -219,7 +207,6 @@ class PaypalComponent extends Component {
 	 *
 	 * @param array   $nvpDataArray Daten-Array
 	 * @return array  Ergebnis-Array
-	 * @access public
 	 * @author Daniel Quappe
 	 */
 	public function doExpressCheckoutPayment($dataArray = array()) {
@@ -270,7 +257,6 @@ class PaypalComponent extends Component {
 	 * @param array
 	 * - amt, firstname, lastname, CREDITCARDTYPE, ACCT, street, zip, ...(required)
 	 * - (optional)
-	 * 2010-09-19 ms
 	 */
 	public function doDirectPayment($nvpDataArray = array()) {
 		$nvpDataArray['PAYMENTACTION'] = 'Sale';
@@ -295,13 +281,10 @@ class PaypalComponent extends Component {
 		return $this->_hashCall("DoDirectPayment", $nvpDataArray);
 	}
 
-
-
 	/**
 	 * @param options:
 	 * - all (true/false), defaults to false
 	 * @return array('currency_code', 'amount', 'timestamp', 'ack', ...)
-	 * 2010-09-19 ms
 	 */
 	public function getBalance($nvpDataArray = array()) {
 		if (!isset($nvpDataArray['RETURNALLCURRENCIES'])) {
@@ -331,7 +314,6 @@ class PaypalComponent extends Component {
 
 	/**
 	 * array(Number=>..., Message=>...)
-	 * 2011-07-08 ms
 	 */
 	public function setError($error) {
 		die(returns($error));
@@ -340,7 +322,6 @@ class PaypalComponent extends Component {
 	/**
 	 * @param string $id: identifier of transaction
 	 * @param string $action: deny/accept (payment)
-	 * 2010-09-19 ms
 	 */
 	public function managePendingTransactionStatus($id, $action = 'accept') {
 		if (empty($id) || $action !== 'accept' && $action !== 'deny') {
@@ -352,11 +333,9 @@ class PaypalComponent extends Component {
 		return $this->_hashCall("ManagePendingTransactionStatus", $nvpDataArray);
 	}
 
-
 	/**
 	 * @param string $id: identifier of transaction
 	 * @return array('AMT', 'TRANSACTIONID', 'FEEAMT', 'CURRENCYCODE', 'PAYMENTSTATUS', 'PENDINGREASON', 'REASONCODE', 'ORDERTIME', 'PAYMENTTYPE', 'TRANSACTIONTYPE', ...)
-	 * 2010-09-19 ms
 	 */
 	public function getTransactionDetails($id, $nvpDataArray = array()) {
 		if (empty($id) || false) { //TODO: Character length and limitations: 17 single-byte alphanumeric characters.
@@ -367,11 +346,9 @@ class PaypalComponent extends Component {
 		return $this->_hashCall("GetTransactionDetails", $nvpDataArray);
 	}
 
-
 	/**
 	 * //TODO
 	 * @param email, street, zip (all required)
-	 * 2010-09-19 ms
 	 */
 	public function verifyAddress($nvpDataArray = array()) {
 		//$nvpDataArray['EMAIL'];
@@ -392,13 +369,10 @@ class PaypalComponent extends Component {
 		//return $this->_hashCall("RefundTransaction", $nvpDataArray)
 	}
 
-
 	//TODO
 	public function getBillingAgreementCustomerDetails() {
 		//return $this->_hashCall("GetBillingAgreementCustomerDetails", $nvpDataArray)
 	}
-
-
 
 	/**
 	 * Zentrale cURL-Methode zur Kommunikation mit Paypal
@@ -406,7 +380,6 @@ class PaypalComponent extends Component {
 	 * @param string  $methodName   API-Methode
 	 * @param array   $nvpDataArray Name-Value-Pair-Data
 	 * @return array  $nvpResArray  Ergebnis-Array
-	 * @access private
 	 * @author Daniel Quappe
 	 */
 	public function _hashCall($methodName = '', $nvpDataArray = array()) {
@@ -470,7 +443,6 @@ class PaypalComponent extends Component {
 	 * @param string  $errorMsg Error-Description
 	 * @param array   $resArray Data-Array
 	 * @return array  $resArray Extended Data-Array
-	 * @access public
 	 * @author Daniel Quappe
 	 */
 	public function _buildError($errorNo = '', $errorMsg = '', $resArray = array()) {
@@ -478,7 +450,6 @@ class PaypalComponent extends Component {
 		$resArray['Error']['Message'] = $errorMsg;
 		return $resArray;
 	}
-
 
 	/** This function will take NVPString and convert it to an Associative Array and it will decode the response.
 	 * It is usefull to search for a particular key and displaying arrays.

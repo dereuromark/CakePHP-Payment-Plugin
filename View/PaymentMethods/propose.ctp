@@ -6,7 +6,7 @@
 		 		<legend><?php echo __('Propose %s', __('Payment Method')); ?></legend>
 	<?php
 		echo $this->Form->input('name');
-		echo $this->Form->input('description', array('type'=>'textarea', 'class'=>'halfSize'));
+		echo $this->Form->input('description', array('type'=>'textarea'));
 		echo $this->Form->input('url', array('label'=>__('Website')));
 
 		echo BR;

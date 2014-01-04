@@ -4,6 +4,7 @@ App::uses('BitcoinAddressesController', 'Payment.Controller');
 App::uses('MyCakeTestCase', 'Tools.TestSuite');
 
 class TestBitcoinAddressesController extends BitcoinAddressesController {
+
 	public $autoRender = false;
 
 	public function redirect($url, $status = null, $exit = true) {
@@ -12,6 +13,7 @@ class TestBitcoinAddressesController extends BitcoinAddressesController {
 }
 
 class BitcoinAddressesControllerTest extends MyCakeTestCase {
+
 	public function setUp() {
 		$this->BitcoinAddresses = new TestBitcoinAddressesController();
 		$this->BitcoinAddresses->constructClasses();
