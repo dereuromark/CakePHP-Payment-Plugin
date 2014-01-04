@@ -6,26 +6,28 @@ App::uses('View', 'View');
 App::uses('Controller', 'Controller');
 
 /**
- * Bitcoin Test Case
+ * BitcoinHelper Test Case
  */
-class BitcoinTest extends MyCakeTestCase {
+class BitcoinHelperTest extends MyCakeTestCase {
 
 	public $Bitcoin;
 
 	/**
-	 * SetUp method
+	 * setUp method
 	 *
-	 * @access public
 	 * @return void
 	 */
 	public function setUp() {
+		parent::setUp();
+
 		$this->Bitcoin = new BitcoinHelper(new View(new Controller(new CakeRequest(null, false), null)));
 	}
 
 	/**
-	 * Test image
+	 * test image
 	 *
-	 * 2011-07-20 ms
+	 * @covers BitcoinHelper::image
+	 * @return void
 	 */
 	public function testImage() {
 		$res = $this->Bitcoin->image(null, array('title' => 'XYZ'));
@@ -44,7 +46,6 @@ class BitcoinTest extends MyCakeTestCase {
 		pr($res);
 	}
 
-
 	public function testBox() {
 		$res = $this->Bitcoin->paymentBox(3.123456, '4578345734895734895734df34873847283478');
 		pr($res);
@@ -56,13 +57,9 @@ class BitcoinTest extends MyCakeTestCase {
 		pr($res);
 	}
 
-
-
-
 	/**
-	 * TearDown method
+	 * tearDown method
 	 *
-	 * @access public
 	 * @return void
 	 */
 	public function tearDown() {
