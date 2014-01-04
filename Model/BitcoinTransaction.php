@@ -222,7 +222,7 @@ class BitcoinTransaction extends PaymentAppModel {
 	}
 
 	/**
-	 * via cronjob every few minutes
+	 * Via cronjob every few minutes
 	 * updates all transactions
 	 */
 	public function checkTransactions() {
@@ -305,7 +305,7 @@ class BitcoinTransaction extends PaymentAppModel {
 	}
 
 	/**
-	 * for selects
+	 * For selects
 	 * similar to find('list')
 	 */
 	public function addressList($addresses = null) {
@@ -317,7 +317,7 @@ class BitcoinTransaction extends PaymentAppModel {
 	}
 
 	/**
-	 * for selects
+	 * For selects
 	 * similar to find('list')
 	 */
 	public function accountList($accounts = null) {

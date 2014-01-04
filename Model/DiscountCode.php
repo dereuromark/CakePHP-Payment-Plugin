@@ -82,15 +82,16 @@ class DiscountCode extends PaymentAppModel {
 	/**
 	 * DiscountCode::checkDate()
 	 * Checks if today is between DiscountCode.created and DiscountCode.created+validityDays
+	 *
 	 * @param array $code array('DiscountCode'=>...)
 	 */
 	public function checkDate($code) {
-		if(empty($code['Discount']['validity_days'])) {
+		if (empty($code['Discount']['validity_days'])) {
 			return true;
 		}
 		$validityDate = strtotime($code['DiscountCode']['created']) + $code['Discount']['validity_days'] * DAY;
 		$now = time();
-		if($now <= $validityDate) {
+		if ($now <= $validityDate) {
 			return true;
 		}
 		return false;
@@ -112,10 +113,11 @@ class DiscountCode extends PaymentAppModel {
 	/**
 	 * DiscountCode::setFree()
 	 * Sets a used Discountcode free, so that you can use it again
+	 *
 	 * @param integer $discountCodeId
 	 */
 	public function setFree($discountCodeId) {
-		if($discountCode = $this->find('first', array('conditions' => array('id' => $discountCodeId)))) {
+		if ($discountCode = $this->find('first', array('conditions' => array('id' => $discountCodeId)))) {
 			$discountCode['DiscountCode']['used'] = 0;
 			$discountCode['DiscountCode']['model'] = '';
 			$discountCode['DiscountCode']['redeemed_amount'] = 0.00;

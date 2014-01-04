@@ -121,7 +121,7 @@ class BitcoinLibTest extends MyCakeTestCase {
 		pr($res);
 		if (!$this->Bitcoin->settings['daemon']) {
 			$this->assertTrue(empty($res));
-		} else{
+		} else {
 			$this->assertTrue(!empty($res));
 		}
 	}
@@ -131,7 +131,7 @@ class BitcoinLibTest extends MyCakeTestCase {
 		pr($res);
 		if (!$this->Bitcoin->settings['daemon']) {
 			$this->assertFalse($res);
-		} else{
+		} else {
 			$this->assertTrue(is_numeric($res)); # can be < > or =
 		}
 	}

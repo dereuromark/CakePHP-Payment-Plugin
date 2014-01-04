@@ -13,7 +13,7 @@ class BitcoinTest extends MyCakeTestCase {
 	public $Bitcoin;
 
 	/**
-	 * setUp method
+	 * SetUp method
 	 *
 	 * @access public
 	 * @return void
@@ -23,7 +23,7 @@ class BitcoinTest extends MyCakeTestCase {
 	}
 
 	/**
-	 * test image
+	 * Test image
 	 *
 	 * 2011-07-20 ms
 	 */
@@ -37,7 +37,7 @@ class BitcoinTest extends MyCakeTestCase {
 		$res = $this->Bitcoin->image(32);
 		pr($res);
 
-		$res = $this->Bitcoin->image(48, array('onclick'=>'alert(\'HI\')', 'title' => 'XYZ'));
+		$res = $this->Bitcoin->image(48, array('onclick' => 'alert(\'HI\')', 'title' => 'XYZ'));
 		pr($res);
 
 		$res = $this->Bitcoin->image(64, array('title' => 'XYZ'));
@@ -60,7 +60,7 @@ class BitcoinTest extends MyCakeTestCase {
 
 
 	/**
-	 * tearDown method
+	 * TearDown method
 	 *
 	 * @access public
 	 * @return void

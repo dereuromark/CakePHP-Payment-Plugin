@@ -171,7 +171,8 @@ class BitcoinLib extends Bitcoin {
 	}
 
 	/**
-	 * gets the balance of a specific account in your wallet
+	 * Gets the balance of a specific account in your wallet
+	 *
 	 * @param string $account (defaults to own)
 	 * @return integer amount or bool FALSE if offline or account not found
 	 */
@@ -205,11 +206,12 @@ class BitcoinLib extends Bitcoin {
 	}
 
 	/**
+	 * Make sure an address is correct (length, network availability)
+	 * note: if in offline mode it will only check the length and chars
+	 *
 	 * @param string $address
 	 * @param boolean $isMine (defaults to null): false => has to be foreign, true => has to be own
-	 * @return boolean success
-	 * make sure an address is correct (length, network availability)
-	 * note: if in offline mode it will only check the length and chars
+	 * @return boolean Success
 	 */
 	public function validateAddress($address, $isMine = null) {
 		/*
@@ -304,8 +306,8 @@ class BitcoinLib extends Bitcoin {
 
 	/**
 	 * Returns total BTC sent by an address. Using this data is almost always a very
-bad idea, as the amount of BTC sent by an address is usually very different
-from the amount of BTC sent by the person owning the address
+	 * bad idea, as the amount of BTC sent by an address is usually very different
+	 * from the amount of BTC sent by the person owning the address
 	 */
 	public function getTotalSentByAddress($address) {
 		return $this->_query('getsentbyaddress/' . $address);
@@ -313,21 +315,25 @@ from the amount of BTC sent by the person owning the address
 
 	/**
 	 * Returns all transactions sent or received by the period-separated Bitcoin
-addresses in parameter 1. The optional parameter 2 contains a hexadecimal block
-hash: transactions in blocks up to and including this block will not be returned.
+	 * addresses in parameter 1. The optional parameter 2 contains a hexadecimal block
+	 * hash: transactions in blocks up to and including this block will not be returned.
+	 *
+	 * @return array
 	 */
 	public function myTransactions($address, $block = null) {
 		if ($block) {
 			$address .= '/' . $block;
 		}
 		$res = $this->_query('mytransactions/' . $address);
-		if (!empty($res)) {
-			return (array)json_decode($res);
+		if (empty($res)) {
+			return array();
 		}
+		return (array)json_decode($res);
 	}
 
 	/**
-	 * shows the number of blocks in the longest block chain (not including the genesis block). Equivalent to Bitcoin's getblockcount
+	 * Shows the number of blocks in the longest block chain (not including the genesis block). Equivalent to Bitcoin's getblockcount
+	 *
 	 * @return integer
 	 */
 	public function getBlockCount() {
@@ -342,7 +348,8 @@ hash: transactions in blocks up to and including this block will not be returned
 	}
 
 	/**
-	 * shows the difficulty
+	 * Shows the difficulty
+	 *
 	 * @return integer
 	 */
 	public function getDifficulty() {
@@ -360,8 +367,9 @@ hash: transactions in blocks up to and including this block will not be returned
 
 	/**
 	 * Returns total BTC received by an address. Sends are not taken into account.
-The optional second parameter specifies the required number of confirmations for
-transactions comprising the balance
+	 * The optional second parameter specifies the required number of confirmations for
+	 * transactions comprising the balance
+   *
 	 * @return float amount
 	 */
 	public function _getReceivedByAddress($address, $minconf = null) {

@@ -76,7 +76,7 @@ class Discount extends PaymentAppModel {
 	);
 
 	/**
-	 * validate that either amount or factor is given
+	 * Validate that either amount or factor is given
 	 *
 	 * @return boolean success
 	 */
@@ -169,7 +169,7 @@ class Discount extends PaymentAppModel {
 	}
 
 	/**
-	 * calculate()
+	 * Calculate()
 	 *
 	 * @param float $oldValue
 	 * @param array $discount['Discount']
@@ -187,7 +187,7 @@ class Discount extends PaymentAppModel {
 	}
 
 	/**
-	 * calculateRedeemedAmount()
+	 * CalculateRedeemedAmount()
 	 *
 	 * @param float $value
 	 * @param array $discount['Discount']

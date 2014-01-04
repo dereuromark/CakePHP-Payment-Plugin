@@ -45,7 +45,7 @@ class DiscountCodesController extends PaymentAppController {
 			if ($did) {
 				$this->request->data['DiscountCode']['discount_id'] = $did;
 				$discount = $this->DiscountCode->Discount->find('first', array('conditions' => array('id' => $did)));
-				if(!empty($discount['Discount']['validity_days'])) {
+				if (!empty($discount['Discount']['validity_days'])) {
 					$this->request->data['DiscountCode']['validity_days'] = $discount['Discount']['validity_days'];
 				}
 			}

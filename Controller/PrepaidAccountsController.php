@@ -229,7 +229,7 @@ class PrepaidAccountsController extends PaymentAppController {
  ****************************************************************************************/
 
 	/**
-	 * validate that all transactions sum up to the current balance!
+	 * Validate that all transactions sum up to the current balance!
 	 *
 	 */
 	public function admin_validate() {
@@ -324,7 +324,7 @@ class PrepaidAccountsController extends PaymentAppController {
 	}
 
 	/**
-	 * void the prepaid account or make a payout to this user (cash, transfer, ...)
+	 * Void the prepaid account or make a payout to this user (cash, transfer, ...)
 	 *
 	 */
 	public function admin_payout($id = null) {

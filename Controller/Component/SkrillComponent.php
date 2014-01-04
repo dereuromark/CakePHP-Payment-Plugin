@@ -58,7 +58,8 @@ class SkrillComponent extends Component {
 	}
 
 	/**
-	 * go the express checkout
+	 * Go the express checkout
+	 *
 	 * @oparam token $sId from setExpressCheckout
 	 * @see http://www.moneybookers.com/merchant/de/moneybookers_gateway_manual.pdf
 	 */
@@ -70,7 +71,8 @@ class SkrillComponent extends Component {
 	}
 
 	/**
-	 * get current settings
+	 * Get current settings
+	 *
 	 * @param key
 	 */
 	public function get($key) {
@@ -104,6 +106,7 @@ class SkrillComponent extends Component {
 
 	/**
 	 * SetExpressCheckout
+	 *
 	 * @see http://www.moneybookers.com/merchant/de/moneybookers_gateway_manual.pdf
 	 *
 	 * @param array   $nvpDataArray Daten-Array
@@ -310,6 +313,7 @@ class SkrillComponent extends Component {
 
 	/** This function will take NVPString and convert it to an Associative Array and it will decode the response.
 	 * It is usefull to search for a particular key and displaying arrays.
+	 *
 	 * @nvpstr is NVPString.
 	 * @nvpArray is Associative Array.
 	 */

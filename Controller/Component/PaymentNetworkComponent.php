@@ -65,7 +65,8 @@ class PaymentNetworkComponent extends Component {
 	}
 
 	/**
-	 * get current settings
+	 * Get current settings
+	 *
 	 * @param key
 	 */
 	public function get($key) {
@@ -77,7 +78,8 @@ class PaymentNetworkComponent extends Component {
 	}
 
 	/**
-	 * go the express checkout
+	 * Go the express checkout
+	 *
 	 * @see https://www.paypal.com/en_US/ebook/PP_NVPAPI_DeveloperGuide/Appx_fieldreference.html#2830886
 	 */
 	public function redirect($token) {
@@ -152,7 +154,7 @@ class PaymentNetworkComponent extends Component {
 	}
 
 	/**
-	 * using the classic way (without gateway)
+	 * Using the classic way (without gateway)
 	 * - identification via foreign_id + model (transaction id yet unknown)
 	 */
 	public function setClassicExpressCheckout($data) {
@@ -226,7 +228,8 @@ class PaymentNetworkComponent extends Component {
 	}
 
 	/**
-	 * a key combining user, project and api key for use in the sofort lib
+	 * A key combining user, project and api key for use in the sofort lib
+	 *
 	 * @return string
 	 */
 	protected function _configKey() {

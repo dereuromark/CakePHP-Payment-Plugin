@@ -55,7 +55,7 @@ class BitcoinAddress extends PaymentAppModel {
 	}
 
 	/**
-	 * from a shell cronjob it can make sure there are always unused address available
+	 * From a shell cronjob it can make sure there are always unused address available
 	 * neccessary for security reasons (backuped wallets cannot transfer money anymore otherwise)
 	 * and for a quick response time (takes time to create on on the fly)
 	 * TODO: also clear old unused ones for further use

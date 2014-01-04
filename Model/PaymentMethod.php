@@ -113,7 +113,8 @@ class PaymentMethod extends PaymentAppModel {
 	}
 
 	/**
-	 * get price (rel + set) for payment method
+	 * Get price (rel + set) for payment method
+	 *
 	 * @param $id int PaymentMethod id
 	 * @return array: array(rel_rate=>x, set_rate=>y) or false on failure
 	 */
@@ -152,7 +153,8 @@ class PaymentMethod extends PaymentAppModel {
 /** Static **/
 
 	/**
-	 * replace {} with name etc
+	 * Replace {} with name etc
+	 *
 	 * @static
 	 */
 	public function prep(&$record) {
@@ -168,8 +170,9 @@ class PaymentMethod extends PaymentAppModel {
 	}
 
 	/**
-	 * maybe call it "processor"?
+	 * Maybe call it "processor"?
 	 * Static Model::method()
+	 *
 	 * @static
 	 */
 	public function hooks($value = null) {

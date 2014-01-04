@@ -19,7 +19,7 @@ class PaypalController extends PaymentAppController {
  ****************************************************************************************/
 
 	/**
-	 * paypal admin backend
+	 * Paypal admin backend
 	 * current paypal balance of the system account
 	 * NOTE: everything else in in other plugin paypal_ipn - this is just for testing purposes right now
 	 */
