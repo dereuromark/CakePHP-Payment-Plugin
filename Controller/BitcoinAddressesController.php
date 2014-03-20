@@ -9,14 +9,6 @@ class BitcoinAddressesController extends PaymentAppController {
 		parent::beforeFilter();
 	}
 
-/****************************************************************************************
- * USER functions
- ****************************************************************************************/
-
-/****************************************************************************************
- * ADMIN functions
- ****************************************************************************************/
-
 	public function admin_index() {
 		$this->BitcoinAddress->recursive = 0;
 		$bitcoinAddresses = $this->paginate();
@@ -42,8 +34,6 @@ class BitcoinAddressesController extends PaymentAppController {
 				$this->Common->flashMessage(__('formContainsErrors'), 'error');
 			}
 		}
-		$users = $this->BitcoinAddress->User->find('list');
-		$this->set(compact('users'));
 	}
 
 	public function admin_edit($id = null) {
@@ -63,8 +53,6 @@ class BitcoinAddressesController extends PaymentAppController {
 		if (empty($this->request->data)) {
 			$this->request->data = $bitcoinAddress;
 		}
-		$users = $this->BitcoinAddress->User->find('list');
-		$this->set(compact('users'));
 	}
 
 	public function admin_delete($id = null) {

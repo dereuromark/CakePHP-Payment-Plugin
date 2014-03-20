@@ -5,7 +5,7 @@
 	<fieldset>
  		<legend><?php echo __('Add %s', __('Bitcoin Address')); ?></legend>
 	<?php
-		echo $this->Form->input('user_id', array('empty'=>' - [ '.__('pleaseSelect').' ] - '));
+		//echo $this->Form->input('user_id', array('empty'=>' - [ '.__('pleaseSelect').' ] - '));
 		echo $this->Form->input('model');
 		echo $this->Form->input('foreign_id');
 		echo $this->Form->input('address');

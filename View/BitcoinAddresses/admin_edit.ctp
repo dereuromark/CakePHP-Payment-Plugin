@@ -6,7 +6,7 @@
  		<legend><?php echo __('Edit %s', __('Bitcoin Address')); ?></legend>
 	<?php
 		echo $this->Form->input('id');
-		echo $this->Form->input('user_id', array('empty'=>' - [ '.__('pleaseSelect').' ] - '));
+		//echo $this->Form->input('user_id', array('empty'=>' - [ '.__('pleaseSelect').' ] - '));
 		echo $this->Form->input('model');
 		echo $this->Form->input('foreign_id');
 		echo $this->Form->input('address');
